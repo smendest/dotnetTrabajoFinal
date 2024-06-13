@@ -2,11 +2,9 @@
 
 public class CasoDeUsoTramiteBaja(
   ITramiteRepositorio repoTramite,
-  IExpedienteRepositorio repoExp,
   TramiteValidador validador,
   IServicioAutorizacion autorizacion,
-  IServicioActualizacionEstado actualizacionEstado,
-  IEspecificacionCambioEstado especificacionCambioEstado
+  IServicioActualizacionEstado actualizacionEstado
   )
 {
   public void Ejecutar(int idTramite, int userId)
@@ -23,7 +21,7 @@ public class CasoDeUsoTramiteBaja(
     }
     Tramite tramite = repoTramite.GetTramiteById(idTramite);  // Para pasarle el Expediente asociado al servicio de actualizacion de estado.
     repoTramite.EliminarTramite(idTramite);
-    actualizacionEstado.ActualizarEstadoExpediente(tramite.ExpedienteId, repoTramite, repoExp, especificacionCambioEstado);
+    actualizacionEstado.ActualizarEstadoExpediente(tramite.ExpedienteId);
 
   }
 

@@ -9,8 +9,8 @@ public class AccionesTramite
   static ITramiteRepositorio RepoTramites { get; } = new RepositorioTramitesTXT();
   static TramiteValidador Validador { get; } = new TramiteValidador();
   static IServicioAutorizacion Autorizacion { get; } = new ServicioAutorizacionProvisorio();
-  static IServicioActualizacionEstado ActualizacionEstado { get; } = new ServicioActualizacionEstado();
   static IEspecificacionCambioEstado Especificacion { get; } = new EspecificacionCambioEstado();
+  static IServicioActualizacionEstado ActualizacionEstado { get; } = new ServicioActualizacionEstado(RepoTramites, RepoExpedientes, Especificacion);
 
   public static void Agregar(int userId)
   {
@@ -19,11 +19,9 @@ public class AccionesTramite
 
       var agregarTramite = new CasoDeUsoTramiteAlta(
         RepoTramites,
-        RepoExpedientes,
         Validador,
         Autorizacion,
-        ActualizacionEstado,
-        Especificacion
+        ActualizacionEstado
         );
       Console.WriteLine(">>> ALTA DE TRAMITE <<<");
       Console.WriteLine("Ingrese contenido del Tramite (toda en una sola línea): ");
@@ -44,11 +42,9 @@ public class AccionesTramite
     {
       var eliminarTramite = new CasoDeUsoTramiteBaja(
         RepoTramites,
-        RepoExpedientes,
         Validador,
         Autorizacion,
-        ActualizacionEstado,
-        Especificacion
+        ActualizacionEstado
         );
       Console.WriteLine(">>> BAJA DE TRAMITE <<<");
       Console.WriteLine("Ingrese el id del trámite que desea eliminar: ");
@@ -68,11 +64,9 @@ public class AccionesTramite
     {
       var modificarTramite = new CasoDeUsoTramiteModificacion(
         RepoTramites,
-        RepoExpedientes,
         Validador,
         Autorizacion,
-        ActualizacionEstado,
-        Especificacion
+        ActualizacionEstado
         );
       Console.WriteLine("Ingrese el id del trámite que desea modificar: ");
       int idExp = int.Parse(Console.ReadLine() ?? "0");

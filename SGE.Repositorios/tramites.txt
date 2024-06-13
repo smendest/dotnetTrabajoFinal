@@ -1,6 +1,6 @@
 1
-Primer Tramite
-EscritoPresentado
+Modificado
+Resolucion
 5/13/2024 4:04:19 PM
 5/13/2024 4:04:19 PM
 2
@@ -32,4 +32,11 @@ Despacho
 5/13/2024 4:14:58 PM
 5/13/2024 4:14:58 PM
 3
+1
+6
+Prueba 1
+EscritoPresentado
+6/13/2024 4:51:52 PM
+6/13/2024 4:51:52 PM
+2
 1

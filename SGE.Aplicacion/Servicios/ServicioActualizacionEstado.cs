@@ -17,28 +17,37 @@ suministrada al servicio mediante la técnica de inyección de dependencias.
 
 public class ServicioActualizacionEstado : IServicioActualizacionEstado
 {
-  public void ActualizarEstadoExpediente(
-    int idExpediente,
+  ITramiteRepositorio RepoTramites { get; }
+  IExpedienteRepositorio RepoExp { get; }
+  IEspecificacionCambioEstado EspecificacionCambioEstado { get; }
+
+  public ServicioActualizacionEstado(
     ITramiteRepositorio repoTramites,
     IExpedienteRepositorio repoExp,
-    /*DUDA => DIP de la especificación es así? Genera mucho pasaje de parametros en el caso de uso*/
     IEspecificacionCambioEstado especificacionCambioEstado
     )
   {
+    RepoTramites = repoTramites;
+    RepoExp = repoExp;
+    EspecificacionCambioEstado = especificacionCambioEstado;
+  }
+
+  public void ActualizarEstadoExpediente(int idExpediente)
+  {
 
     // 1. Obtener etiqueta último Tramite
-    var listaTramites = repoTramites.ConsultarTramitesAsociadosAlExp(idExpediente);
+    var listaTramites = RepoTramites.ConsultarTramitesAsociadosAlExp(idExpediente);
     if (listaTramites.Count != 0)
     {
       EtiquetaTramite etiquetaUltimoTramite = listaTramites.Last().Etiqueta;
 
       // 2. Obtener nuevo estado mediante la especificacion
-      Expediente expediente = repoExp.GetExpedienteById(idExpediente);
-    EstadoExpediente nuevoEstado = especificacionCambioEstado.CambiarDeEstado(etiquetaUltimoTramite, expediente.Estado);
+      Expediente expediente = RepoExp.GetExpedienteById(idExpediente);
+      EstadoExpediente nuevoEstado = EspecificacionCambioEstado.CambiarDeEstado(etiquetaUltimoTramite, expediente.Estado);
 
-    // 3. Modificar expediente con el nuevo estado
-    if (expediente.Estado != nuevoEstado)
-    {
+      // 3. Modificar expediente con el nuevo estado
+      if (expediente.Estado != nuevoEstado)
+      {
       expediente.Estado = nuevoEstado;
 
         /* 
@@ -46,8 +55,8 @@ public class ServicioActualizacionEstado : IServicioActualizacionEstado
         los campos de fecha y usuario modificador. Por eso no se utiliza el 
         caso de uso correspondiente a la modificación.
         */
-        repoExp.ModificarExpediente(expediente);
-    }
+        RepoExp.ModificarExpediente(expediente);
+      }
     }
 
   }

@@ -3,11 +3,9 @@
 /*DUDA => DIP de la especificación es así? Genera mucho pasaje de parametros en el caso de uso*/
 public class CasoDeUsoTramiteAlta(
   ITramiteRepositorio repoTramite,
-  IExpedienteRepositorio repoExp,
   TramiteValidador validador,
   IServicioAutorizacion autorizacion,
-  IServicioActualizacionEstado actualizacionEstado,
-  IEspecificacionCambioEstado especificacionCambioEstado
+  IServicioActualizacionEstado actualizacionEstado
   )
 
 {
@@ -28,7 +26,7 @@ public class CasoDeUsoTramiteAlta(
     tramite.FechaUltimaModif = tramite.FechaCreacion;
     tramite.UserId = userId;
     repoTramite.AgregarTramite(tramite);
-    actualizacionEstado.ActualizarEstadoExpediente(tramite.ExpedienteId, repoTramite, repoExp, especificacionCambioEstado);
+    actualizacionEstado.ActualizarEstadoExpediente(tramite.ExpedienteId);
   }
 
 }

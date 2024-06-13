@@ -2,11 +2,9 @@
 
 public class CasoDeUsoTramiteModificacion(
   ITramiteRepositorio repoTramite,
-  IExpedienteRepositorio repoExp,
   TramiteValidador validador,
   IServicioAutorizacion autorizacion,
-  IServicioActualizacionEstado actualizacionEstado,
-  IEspecificacionCambioEstado especificacionCambioEstado
+  IServicioActualizacionEstado actualizacionEstado
   )
 {
   public void Ejecutar(Tramite tramiteModificado, int idUsuario)
@@ -22,7 +20,7 @@ public class CasoDeUsoTramiteModificacion(
       throw new AutorizacionException();
     }
     repoTramite.ModificarTramite(tramiteModificado);
-    actualizacionEstado.ActualizarEstadoExpediente(tramiteModificado.ExpedienteId, repoTramite, repoExp, especificacionCambioEstado);
+    actualizacionEstado.ActualizarEstadoExpediente(tramiteModificado.ExpedienteId);
 
   }
 
