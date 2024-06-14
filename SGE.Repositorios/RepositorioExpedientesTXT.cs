@@ -57,7 +57,7 @@ public class RepositorioExpedientesTXT : IExpedienteRepositorio
     using var sr = new StreamReader(_nombreArch);
     while (!sr.EndOfStream)
     {
-      var expediente = leerExpedienteDelRepo(sr);
+      var expediente = LeerExpedienteDelRepo(sr);
       resultado.Add(expediente);
     }
 
@@ -176,7 +176,7 @@ public class RepositorioExpedientesTXT : IExpedienteRepositorio
 
   }
 
-  Expediente leerExpedienteDelRepo(StreamReader sr, bool withoutId = false)
+  Expediente LeerExpedienteDelRepo(StreamReader sr, bool withoutId = false)
   {
     Expediente expediente = new Expediente();
 
@@ -196,10 +196,10 @@ public class RepositorioExpedientesTXT : IExpedienteRepositorio
     using var sr = new StreamReader(_nombreArch);
     Expediente expediente = new Expediente();
 
-    expediente = leerExpedienteDelRepo(sr);
+    expediente = LeerExpedienteDelRepo(sr);
     while ((!sr.EndOfStream) && (expediente.Id != id))
     {
-      expediente = leerExpedienteDelRepo(sr);
+      expediente = LeerExpedienteDelRepo(sr);
     }
 
     if (expediente.Id != id)
@@ -218,7 +218,7 @@ public class RepositorioExpedientesTXT : IExpedienteRepositorio
 
     while (!sr.EndOfStream)
     {
-      list.Add(leerExpedienteDelRepo(sr));
+      list.Add(LeerExpedienteDelRepo(sr));
 
     }
 
