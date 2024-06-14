@@ -6,17 +6,40 @@ Al finalizar una tarea se debe colocar una `x` entre los corchetes de cada item 
 Las secciones que agrupan tareas pueden modificarse, fusionarse u omitirse si se considera necesario durante el proceso de desarrollo. Han sido copiadas directamente desde el enunciado del trabajo.
 
 ### Gestión de Usuarios:
-- [ ] Desarrollar la funcionalidad necesaria para la gestión de usuarios. Cada usuario debe tener nombre, apellido, correo electrónico, contraseña y una lista de permisos.
+- [x] Desarrollar la funcionalidad necesaria para la gestión de usuarios. Cada usuario debe tener nombre, apellido, correo electrónico, contraseña y una lista de permisos.
 - [ ] Los usuarios pueden tener múltiples permisos. Sólo el Administrador tendrá los permisos necesarios para listar, dar de baja y modificar cualquier usuario o sus permisos.
-- [ ] El primer usuario que se registre en el sistema será el Administrador, quien contará con todos los permisos del sistema, incluyendo la capacidad exclusiva para realizar las tareas mencionadas sobre otros usuarios.
-- [ ] Definir los repositorios y casos de uso que se consideren necesarios.
+- [x] El primer usuario que se registre en el sistema será el Administrador, quien contará con todos los permisos del sistema, incluyendo la capacidad exclusiva para realizar las tareas mencionadas sobre otros usuarios.
+- [/] Definir los repositorios y casos de uso que se consideren necesarios.
+
+#### ToDo list para Gestión de Usuarios
+  - [x] Crear repositorio de usuarios.
+    <!-- - [ ] Crear clase abstracta RepositorioBase. -->
+  - [x] Caso de uso alta de un usuario.
+    - Desde dónde se hará el alta? => Interfaz
+    - Allí se le asignarán los permisos? cuáles? => Ver más abajo
+  - [ ] Caso de uso listar usuarios (solo admin).
+  - [ ] Caso de uso baja de usuario (solo admin).
+  - [ ] Caso de uso modificar usuario (solo admin).
+
+### Persistencia de Datos:
+- [ ] En el proyecto SGE.Repositorios, emplear Entity Framework Core para persistir datos en una base de datos SQLite, siguiendo la metodología “code first”.
+
+
+### Permisos de Usuario:
+- [ ] Los usuarios nuevos contarán inicialmente solo con permisos de lectura.
+- [ ] Solo el Administrador podrá asignar permisos adicionales.
+
+### Esquema de Permisos:
+Mantener el mismo esquema de permisos definido en la primera entrega, con algunas
+modificaciones:
+
+- [ ] En esta entrega, se considerará la posibilidad de que un usuario tenga permiso para eliminar expedientes pero no para eliminar trámites individuales. Al eliminar un expediente, todos los trámites asociados se eliminarán automáticamente, incluso si el usuario no tiene el permiso para dar de baja trámites (permiso TramiteBaja).
+- [ ] De manera similar, un usuario puede tener permiso para modificar trámites pero no para modificar expedientes. Los cambios automáticos en el estado del expediente al modificar, eliminar o agregar un trámite se realizarán de la misma manera, incluso si el usuario no tiene permisos para modificar expedientes (permiso ExpedienteModificacion).
+
 
 ### Servicio de Autorización:
 - [ ] Desarrollar el servicio de autorización ServicioAutorizacion que implemente la interfaz IServicioAutorizacion, reemplazando al servicio de autorización provisorio de la entrega inicial
 - [ ] Este servicio debe verificar realmente si el usuario tiene el permiso requerido.
-
-### Persistencia de Datos:
-- [ ] En el proyecto SGE.Repositorios, emplear Entity Framework Core para persistir datos en una base de datos SQLite, siguiendo la metodología “code first”.
 
 ### Interfaz de Usuario:
 - [ ] Descartar el proyecto SGE.Consola de la primera entrega.
@@ -33,17 +56,7 @@ Las secciones que agrupan tareas pueden modificarse, fusionarse u omitirse si se
 - [ ] El hash de la contraseña debe almacenarse en la base de datos, nunca la contraseña en sí. Para verificar la identidad del usuario al iniciar sesión, se vuelve a calcular el hash de la contraseña ingresada y se compara con el hash almacenado.
 - [ ] Si los hashes coinciden, el usuario ha ingresado la contraseña correcta y se le permite acceder al sistema.
 
-### Permisos de Usuario:
-- [ ] Los usuarios nuevos contarán inicialmente solo con permisos de lectura.
-- [ ] Solo el Administrador podrá asignar permisos adicionales.
-
 ### Acceso Administrativo:
 - [ ] El menú de gestión de usuarios será visible exclusivamente para el Administrador tras iniciar sesión con sus credenciales.
 
-### Esquema de Permisos:
-Mantener el mismo esquema de permisos definido en la primera entrega, con algunas
-modificaciones:
-
-- [ ] En esta entrega, se considerará la posibilidad de que un usuario tenga permiso para eliminar expedientes pero no para eliminar trámites individuales. Al eliminar un expediente, todos los trámites asociados se eliminarán automáticamente, incluso si el usuario no tiene el permiso para dar de baja trámites (permiso TramiteBaja).
-- [ ] De manera similar, un usuario puede tener permiso para modificar trámites pero no para modificar expedientes. Los cambios automáticos en el estado del expediente al modificar, eliminar o agregar un trámite se realizarán de la misma manera, incluso si el usuario no tiene permisos para modificar expedientes (permiso ExpedienteModificacion).
 
