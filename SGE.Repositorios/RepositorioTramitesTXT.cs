@@ -236,19 +236,15 @@ Recorrer el archivo preguntando si el Id del expediente es el buscado.
   public List<Tramite> ConsultarTramitesAsociadosAlExp(int idExpediente)
   {
 
-    using var sr = new StreamReader(_nombreArch);
+    using var db = new RepoContext();
     List<Tramite> listaTramites = new List<Tramite>();
-    Tramite tramite = new Tramite();
-
-    while (!sr.EndOfStream)
+    var expediente = db.Expedientes.Where(exp => exp.Id == idExpediente).SingleOrDefault();
+    if (expediente != null)
     {
-      tramite = leerTramiteDelRepo(sr);
-
-      if (tramite.ExpedienteId == idExpediente)
-      {
-        listaTramites.Add(tramite);
-      }
+      if (expediente.TramitesAsociados != null)
+        listaTramites = expediente.TramitesAsociados;
     }
+    else throw new RepositorioException($"El Expediente con id {idExpediente} no fue encontrado en la base de datos");
 
     return listaTramites;
 
@@ -257,22 +253,11 @@ Recorrer el archivo preguntando si el Id del expediente es el buscado.
 
   public Tramite GetTramiteById(int id)
   {
-    using var sr = new StreamReader(_nombreArch);
-    Tramite tramite = new Tramite();
-
-    tramite = leerTramiteDelRepo(sr);
-    while ((!sr.EndOfStream) && (tramite.Id != id))
-    {
-      tramite = leerTramiteDelRepo(sr);
-    }
-
-    if (tramite.Id != id)
-    {
-      throw new RepositorioException($"El Tramite con id {id} no fue encontrado en el archivo");
-    }
-
+    using var db = new RepoContext();
+    var tramite = db.Tramites.Where(tr => tr.Id == id).SingleOrDefault();
+    if (tramite == null)
+      throw new RepositorioException($"El trámite con id {id} no fue encontrado en la base de datos");
     return tramite;
-
   }
 
 }
