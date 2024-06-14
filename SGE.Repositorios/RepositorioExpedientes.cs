@@ -2,227 +2,86 @@
 
 namespace SGE.Repositorios;
 
-public class RepositorioExpedientesTXT : IExpedienteRepositorio
+public class RepositorioExpedientes : IExpedienteRepositorio
 {
-  // DUDA: Tuve que poner la ruta relativa al repositorio desde SGE.Console. Cómo puedo mejorarlo?
-  readonly string _nombreArch = "../SGE.Repositorios/expedientes.txt";
-  static int s_ultimoId = 0;
-
-  public RepositorioExpedientesTXT()
+  public RepositorioExpedientes()
   {
-    AssignUniqueId();
+    RepoSqlite.Inicializar();   // TODO: Debugg
+
+    // using var context = new RepoContext();
+    // {
+    //   Console.WriteLine("-- Tabla Expedientes --");
+    //   foreach (var exp in context.Expedientes)
+    //   {
+    //     Console.WriteLine($"Id:{exp.Id} {exp.Caratula} -  Creado: {exp.FechaCreacion} - Modificado: {exp.FechaUltimaModif} - Estado: {exp.Estado} - Id de Usuario: {exp.UserId} ");
+    //   }
+
+    //   Console.WriteLine("-- Tabla Tramites --");
+    //   foreach (var tr in context.Tramites)
+    //   {
+    //     Console.WriteLine($"Id:{tr.Id} - {tr.Contenido} - {tr.Etiqueta} - Expediente asociado: {tr.ExpedienteId} - Usuario: {tr.UserId}-  Creado: {tr.FechaCreacion} - Modificado: {tr.FechaUltimaModif}");
+    //   }
+
+    //   Console.WriteLine("-- Tabla Usuarios --");
+    //   foreach (var user in context.Usuarios)
+    //   {
+    //     Console.WriteLine($"Id:{user.Id} - Nombre: {user.Nombre}, Apellido: {user.Apellido}, Email: {user.Email}, Password: {user.Password} ");
+    //   }
+    // }
   }
 
-  /*DUDA: Estoy repitiendo el método statico AssignUniqueId en ambos repositorios ¿Cómo solucionar?*/
-  private void AssignUniqueId()
-  {
-    // Determinar el último Id utilizado en el archivo si existe
-    if (File.Exists(_nombreArch))
-    {
-      using var sr = new StreamReader(_nombreArch);
-      while (!sr.EndOfStream)
-      {
-        int id = int.Parse(sr.ReadLine() ?? "");
-        // Actualizar el último Id utilizado si es mayor que el actual
-        if (id > s_ultimoId)
-        {
-          s_ultimoId = id;
-        }
-        // Saltar las líneas de los campos Caratula, FechaCreacion, FechaUltimaModif, UsedId y Estado
-        sr.ReadLine();
-        sr.ReadLine();
-        sr.ReadLine();
-        sr.ReadLine();
-        sr.ReadLine();
-      }
-    }
-
-  }
 
   public void AgregarExpediente(Expediente expediente)
   {
-    expediente.Id = ++s_ultimoId;
-    using var sw = new StreamWriter(_nombreArch, true);
-    sw.WriteLine(expediente.Id);
-    sw.WriteLine(expediente.Caratula);
-    sw.WriteLine(expediente.FechaCreacion);
-    sw.WriteLine(expediente.FechaUltimaModif);
-    sw.WriteLine(expediente.UserId);
-    sw.WriteLine(expediente.Estado);
+    using var db = new RepoContext();
+    // el Id será establecido por SQLite
+    db.Add(expediente); // se agregará realmente con el db.SaveChanges()
+    db.SaveChanges(); //actualiza la base de datos. SQlite establece el valor de expediente.Id
   }
 
-  public List<Expediente> ListarExpedientes()
-  {
-    var resultado = new List<Expediente>();
-    using var sr = new StreamReader(_nombreArch);
-    while (!sr.EndOfStream)
-    {
-      var expediente = LeerExpedienteDelRepo(sr);
-      resultado.Add(expediente);
-    }
-
-    return resultado;
-  }
-
-  /*
-  Recorrer el archivo preguntando si el Id del expediente es el buscado.
-  - Copiar a tempFile todas las líneas que no sean del expediente buscado.
-  - SI es => no se copian las líneas
-  - Al finalizar se borra el archivo y se crea nuevamente a partir de tempFile.
-  */
   public void EliminarExpediente(int id)
   {
-    string tempFile = Path.GetTempFileName();
-
-    using var sr = new StreamReader(_nombreArch);
-    using var sw = new StreamWriter(tempFile);
-    string lineId;
-    bool expedienteEcontrado = false;
-
-    while (!sr.EndOfStream)
+    using var db = new RepoContext();
+    var alumnoBorrar = db.Expedientes.Where(exp => exp.Id == id).SingleOrDefault();
+    if (alumnoBorrar != null)
     {
-      lineId = sr.ReadLine() ?? "";
-      if (lineId == id.ToString())
-      {
-        expedienteEcontrado = true;
-        // Leo todas las propiedades del expediente encontrado sin copiarlas
-        sr.ReadLine();  // Caratula
-        sr.ReadLine();  // FechaCreacion
-        sr.ReadLine();  // FechaUltimaModif
-        sr.ReadLine();  // UsedID
-        sr.ReadLine();  // Estado
-      }
-      else
-      {
-        /*
-          Si el Id no corresponde al expediente a eliminar
-          se escriben todas las propiedades del expediente
-          en el archivo temporal.
-        */
-        sw.WriteLine(lineId);
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-
-      }
+      db.Remove(alumnoBorrar); //se borra realmente con el db.SaveChanges()
+      db.SaveChanges(); //actualiza la base de datos.
     }
-
-    if (expedienteEcontrado)
-    {
-      File.Delete(_nombreArch);
-      File.Move(tempFile, _nombreArch);
-      // File.Replace(tempFile, _nombreArch, null); Es otra opción a tener en cuenta
-    }
-    else throw new RepositorioException($"El Expediente con id {id} no fue encontrado en el archivo");
-
+    else throw new RepositorioException($"El Expediente con id {id} no fue encontrado en la base de datos");
   }
 
-  // TODO: Rehacer similar al Eliminar()
   public void ModificarExpediente(Expediente expModificado)
   {
-    string tempFile = Path.GetTempFileName();
-    using var sr = new StreamReader(_nombreArch);
-    using var sw = new StreamWriter(tempFile);
-    string lineId;
-    bool expedienteEcontrado = false;
-
-    while (!sr.EndOfStream)
+    using var db = new RepoContext();
+    var examenModificar = db.Expedientes.Where(
+      e => e.Id == expModificado.Id).SingleOrDefault();
+    if (examenModificar != null)
     {
-      lineId = sr.ReadLine() ?? "";
-      if (lineId == expModificado.Id.ToString())
-      {
-        expedienteEcontrado = true;
-        // Reemplazamos uno a uno los campos
-        sw.WriteLine(lineId);
-        sr.ReadLine();  // Caratula
-        sw.WriteLine(expModificado.Caratula);
-        sr.ReadLine();  // FechaCreacion
-        sw.WriteLine(expModificado.FechaCreacion);
-        sr.ReadLine();  // FechaUltimaModif
-        sw.WriteLine(expModificado.FechaUltimaModif);
-        sr.ReadLine();  // UsedID
-        sw.WriteLine(expModificado.UserId);
-        sr.ReadLine();  // Estado
-        sw.WriteLine(expModificado.Estado);
-      }
-      else
-      {
-        /*
-          Si el Id no corresponde al expediente a modificar
-          se escriben todas las propiedades del expediente
-          en el archivo temporal sin modificación.
-        */
-        sw.WriteLine(lineId);
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-        sw.WriteLine(sr.ReadLine());
-
-      }
-    }
-    if (expedienteEcontrado)
-    {
-      File.Delete(_nombreArch);
-      File.Move(tempFile, _nombreArch);
-      // File.Replace(tempFile, _nombreArch, null); Es otra opción a tener en cuenta
+      examenModificar = expModificado; //se modifica el registro en memoria
+      db.SaveChanges(); //actualiza la base de datos.
     }
     else
     {
-      throw new RepositorioException($"El Expediente con id {expModificado.Id} no fue encontrado en el archivo");
+      throw new RepositorioException($"El Expediente con id {expModificado.Id} no fue encontrado en la base de datos");
     }
 
-  }
-
-  Expediente LeerExpedienteDelRepo(StreamReader sr, bool withoutId = false)
-  {
-    Expediente expediente = new Expediente();
-
-    if (!withoutId)
-      expediente.Id = int.Parse(sr.ReadLine() ?? "");
-    expediente.Caratula = sr.ReadLine() ?? "";
-    expediente.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
-    expediente.FechaUltimaModif = DateTime.Parse(sr.ReadLine() ?? "");
-    expediente.UserId = int.Parse(sr.ReadLine() ?? "");
-    expediente.Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "");
-
-    return expediente;
   }
 
   public Expediente GetExpedienteById(int id)
   {
-    using var sr = new StreamReader(_nombreArch);
-    Expediente expediente = new Expediente();
-
-    expediente = LeerExpedienteDelRepo(sr);
-    while ((!sr.EndOfStream) && (expediente.Id != id))
-    {
-      expediente = LeerExpedienteDelRepo(sr);
-    }
-
-    if (expediente.Id != id)
-    {
-      throw new RepositorioException($"El Expediente con id {id} no fue encontrado en el archivo");
-    }
+    using var db = new RepoContext();
+    var expediente = db.Expedientes.Where(exp => exp.Id == id).SingleOrDefault();
+    if (expediente == null)
+      throw new RepositorioException($"El Expediente con id {id} no fue encontrado en la base de datos");
 
     return expediente;
-
   }
 
   public List<Expediente> ConsultarTodos()
   {
-    var sr = new StreamReader(_nombreArch);
-    List<Expediente> list = new List<Expediente>();
-
-    while (!sr.EndOfStream)
-    {
-      list.Add(LeerExpedienteDelRepo(sr));
-
-    }
-
-    return list;
+    using var db = new RepoContext();
+    return db.Expedientes.ToList();
   }
 
 }
