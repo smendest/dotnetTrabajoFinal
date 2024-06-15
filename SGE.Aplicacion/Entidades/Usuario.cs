@@ -10,14 +10,8 @@ public class Usuario
   public bool? IsAdmin { get; set; }
   public List<Permiso>? Permisos { get; set; }
 
-  // public Usuario(string nombre, string apellido, string email, string password)
-  // {
-  //   Nombre = nombre;
-  //   Apellido = apellido;
-  //   Email = email;
-  //   Password = password;
-  // }
-
+  // public List<Expediente>? ExpedientesAsociados { get; set; }
+  // public List<Tramite>? TramitesAsociados { get; set; }
 
   public override string ToString()
   {
