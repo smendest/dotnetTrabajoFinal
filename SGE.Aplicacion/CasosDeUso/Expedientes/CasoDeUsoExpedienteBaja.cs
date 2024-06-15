@@ -15,7 +15,6 @@ public class CasoDeUsoExpedienteBaja(IExpedienteRepositorio repoExp, ITramiteRep
       throw new AutorizacionException();
     }
     repoExp.EliminarExpediente(idExpediente);
-    repoTramite.EliminarTramitesAsociados(idExpediente);
   }
 }
 

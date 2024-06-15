@@ -19,6 +19,8 @@ public class CasoDeUsoTramiteModificacion(
     {
       throw new AutorizacionException();
     }
+    tramiteModificado.FechaUltimaModif = DateTime.Now;
+    tramiteModificado.UserId = idUsuario;
     repoTramite.ModificarTramite(tramiteModificado);
     actualizacionEstado.ActualizarEstadoExpediente(tramiteModificado.ExpedienteId);
 
