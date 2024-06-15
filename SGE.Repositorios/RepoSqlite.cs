@@ -11,7 +11,7 @@ public class RepoSqlite
     {
       Console.WriteLine("Se creó base de datos");
 
-      // Inicializar db con algunos expedientes y sus trámites asociados
+      // Inicialización db con algunos expedientes y sus trámites asociados:
 
       context.Expedientes.Add(new Expediente()
       {
