@@ -3,7 +3,7 @@
 ##
 
 # Db files will not be included in this project
-*.sqlite*
+*.sqlite
 
 ## Get latest from `dotnet new gitignore`
 
