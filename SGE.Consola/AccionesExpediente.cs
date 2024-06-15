@@ -33,7 +33,7 @@ public class AccionesExpediente
     try
     {
 
-      var eliminarExpediente = new CasoDeUsoExpedienteBaja(RepoExpedientes, RepoTramites, Validador, Autorizacion);
+      var eliminarExpediente = new CasoDeUsoExpedienteBaja(RepoExpedientes, Validador, Autorizacion);
       Console.WriteLine(">>> BAJA DE EXPEDIENTE ");
       Console.WriteLine("Ingrese el id de expediente que desea eliminar: ");
       int id = int.Parse(Console.ReadLine() ?? "0");
