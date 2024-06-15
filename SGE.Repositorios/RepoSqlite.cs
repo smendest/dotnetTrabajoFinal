@@ -19,13 +19,14 @@ public class RepoSqlite
         FechaCreacion = DateTime.Parse("5/12/2024 8:57:20 PM"),
         FechaUltimaModif = DateTime.Parse("5/12/2024 8:57:20 PM"),
         Estado = EstadoExpediente.RecienIniciado,
+        UserId = 1,
         TramitesAsociados = new List<Tramite>(){
           new Tramite() {
             Contenido = "Primer trámite",
             Etiqueta = EtiquetaTramite.EscritoPresentado,
             FechaCreacion = DateTime.Parse("6/12/2024 9:50:00 PM"),
             FechaUltimaModif = DateTime.Parse("6/12/2024 9:50:00 PM"),
-            // ExpedienteId = 1,   Lo agregará solo el ORM?
+            ExpedienteId = 1,
             UserId = 1,
           }
         }
@@ -36,13 +37,14 @@ public class RepoSqlite
         FechaCreacion = DateTime.Parse("6/12/2024 9:50:00 PM"),
         FechaUltimaModif = DateTime.Parse("6/12/2024 9:50:00 PM"),
         Estado = EstadoExpediente.RecienIniciado,
+        UserId = 1,
         TramitesAsociados = new List<Tramite>(){
           new Tramite() {
             Contenido = "Segundo trámite",
             Etiqueta = EtiquetaTramite.Despacho,
             FechaCreacion = DateTime.Parse("6/12/2024 9:50:00 PM"),
             FechaUltimaModif = DateTime.Parse("6/12/2024 9:50:00 PM"),
-            // ExpedienteId = 2,        Lo agregará solo el ORM?
+            ExpedienteId = 2,
             UserId = 1,
           }
         }
