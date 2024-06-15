@@ -48,6 +48,7 @@ public class RepoSqlite
         }
       });
 
+      context.SaveChanges();
     }
   }
 }

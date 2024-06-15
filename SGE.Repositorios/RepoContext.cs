@@ -14,7 +14,7 @@ public class RepoContext : DbContext
   protected override void OnConfiguring(DbContextOptionsBuilder
       optionsBuilder)
   {
-    optionsBuilder.UseSqlite("data source=Repositorios.sqlite");
+    optionsBuilder.UseSqlite("data source=../SGE.Repositorios/Repositorios.sqlite");
   }
 }
 

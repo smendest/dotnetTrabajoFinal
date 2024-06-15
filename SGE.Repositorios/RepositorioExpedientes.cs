@@ -4,33 +4,6 @@ namespace SGE.Repositorios;
 
 public class RepositorioExpedientes : IExpedienteRepositorio
 {
-  public RepositorioExpedientes()
-  {
-    RepoSqlite.Inicializar();   // TODO: Debugg
-
-    // using var context = new RepoContext();
-    // {
-    //   Console.WriteLine("-- Tabla Expedientes --");
-    //   foreach (var exp in context.Expedientes)
-    //   {
-    //     Console.WriteLine($"Id:{exp.Id} {exp.Caratula} -  Creado: {exp.FechaCreacion} - Modificado: {exp.FechaUltimaModif} - Estado: {exp.Estado} - Id de Usuario: {exp.UserId} ");
-    //   }
-
-    //   Console.WriteLine("-- Tabla Tramites --");
-    //   foreach (var tr in context.Tramites)
-    //   {
-    //     Console.WriteLine($"Id:{tr.Id} - {tr.Contenido} - {tr.Etiqueta} - Expediente asociado: {tr.ExpedienteId} - Usuario: {tr.UserId}-  Creado: {tr.FechaCreacion} - Modificado: {tr.FechaUltimaModif}");
-    //   }
-
-    //   Console.WriteLine("-- Tabla Usuarios --");
-    //   foreach (var user in context.Usuarios)
-    //   {
-    //     Console.WriteLine($"Id:{user.Id} - Nombre: {user.Nombre}, Apellido: {user.Apellido}, Email: {user.Email}, Password: {user.Password} ");
-    //   }
-    // }
-  }
-
-
   public void AgregarExpediente(Expediente expediente)
   {
     using var db = new RepoContext();
