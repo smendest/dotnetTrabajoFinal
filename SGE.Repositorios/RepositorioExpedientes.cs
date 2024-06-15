@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion;
+﻿using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion;
 
 namespace SGE.Repositorios;
 
@@ -31,7 +32,12 @@ public class RepositorioExpedientes : IExpedienteRepositorio
       e => e.Id == expModificado.Id).SingleOrDefault();
     if (examenModificar != null)
     {
-      examenModificar = expModificado; //se modifica el registro en memoria
+      /* Se modifica el registro en memoria */
+      examenModificar.Caratula = expModificado.Caratula;
+      examenModificar.FechaUltimaModif = expModificado.FechaUltimaModif;
+      // examenModificar.Estado = expModificado.Estado;   Actualmente no se habilitó su modificación
+      examenModificar.UserId = expModificado.UserId;
+
       db.SaveChanges(); //actualiza la base de datos.
     }
     else
@@ -40,11 +46,11 @@ public class RepositorioExpedientes : IExpedienteRepositorio
     }
 
   }
-
+  /* Devuelve el expediente con sus trámites asociados */
   public Expediente GetExpedienteById(int id)
   {
     using var db = new RepoContext();
-    var expediente = db.Expedientes.Where(exp => exp.Id == id).SingleOrDefault();
+    var expediente = db.Expedientes.Include(value => value.TramitesAsociados).Where(exp => exp.Id == id).SingleOrDefault();
     if (expediente == null)
       throw new RepositorioException($"El Expediente con id {id} no fue encontrado en la base de datos");
 

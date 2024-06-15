@@ -35,14 +35,14 @@ public class ServicioActualizacionEstado : IServicioActualizacionEstado
   public void ActualizarEstadoExpediente(int idExpediente)
   {
 
-    // 1. Obtener etiqueta último Tramite
-    var listaTramites = RepoTramites.ConsultarTramitesAsociadosAlExp(idExpediente);
+    Expediente expediente = RepoExp.GetExpedienteById(idExpediente);
+    var listaTramites = expediente.TramitesAsociados ?? [];
     if (listaTramites.Count != 0)
     {
+      // 1. Obtener etiqueta último Tramite
       EtiquetaTramite etiquetaUltimoTramite = listaTramites.Last().Etiqueta;
 
       // 2. Obtener nuevo estado mediante la especificacion
-      Expediente expediente = RepoExp.GetExpedienteById(idExpediente);
       EstadoExpediente nuevoEstado = EspecificacionCambioEstado.CambiarDeEstado(etiquetaUltimoTramite, expediente.Estado);
 
       // 3. Modificar expediente con el nuevo estado

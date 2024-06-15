@@ -7,7 +7,6 @@ public interface ITramiteRepositorio
   void ModificarTramite(Tramite tramiteModificado);
   List<Tramite> ConsultarPorEtiqueta(EtiquetaTramite etiquetaElegida);
   void EliminarTramitesAsociados(int idExpediente);
-  List<Tramite> ConsultarTramitesAsociadosAlExp(int idExpediente);
   Tramite GetTramiteById(int id);
 
 }

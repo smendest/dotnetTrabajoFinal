@@ -53,7 +53,7 @@ public class AccionesExpediente
     try
     {
       var modificarExpediente = new CasoDeUsoExpedienteModificacion(RepoExpedientes, Validador, Autorizacion);
-      var consultarPorId = new CasoDeUsoExpedienteConsultaPorId(RepoExpedientes, RepoTramites);
+      var consultarPorId = new CasoDeUsoExpedienteConsultaPorId(RepoExpedientes);
       Console.WriteLine("Ingrese el id del expediente que desea modificar: ");
       int idExp = int.Parse(Console.ReadLine() ?? "0");
       Expediente expediente = consultarPorId.Ejecutar(idExp);
@@ -93,7 +93,7 @@ public class AccionesExpediente
   {
     try
     {
-      var consultarPorId = new CasoDeUsoExpedienteConsultaPorId(RepoExpedientes, RepoTramites);
+      var consultarPorId = new CasoDeUsoExpedienteConsultaPorId(RepoExpedientes);
       Console.WriteLine("Ingresar el id del expediente requerido: ");
       int id = int.Parse(Console.ReadLine() ?? "0");
       Expediente expediente = consultarPorId.Ejecutar(id);
