@@ -2,10 +2,11 @@
 
 public interface IUsuarioRepositorio
 {
+  bool EsPrimerUsuario();
   void AltaDeUsuario(Usuario usuario);
   void BajaDeUsuario(int id);
   void ModificarUsuario(Usuario uModificado);
   List<Usuario> ConsultarTodos();
-  public Usuario GetUserById(int id);
+  Usuario GetUserById(int id);
 
 }

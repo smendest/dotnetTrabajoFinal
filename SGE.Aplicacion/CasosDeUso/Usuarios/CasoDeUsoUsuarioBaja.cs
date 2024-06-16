@@ -5,9 +5,9 @@ public class CasoDeUsoUsuarioBaja(IUsuarioRepositorio repo, IServicioAutorizacio
   public void Ejecutar(int idUsuarioAEliminar, int IdUsuarioActual)
   {
     // Verificacación de permisos del usuario.
-    if (!autorizacion.PoseeElPermiso(IdUsuarioActual, Permiso.UsuarioBaja))
-      throw new AutorizacionException();
-    else
+    if (autorizacion.PoseeElPermiso(IdUsuarioActual, Permiso.UsuarioBaja))
       repo.BajaDeUsuario(idUsuarioAEliminar);
+    else
+      throw new AutorizacionException();
   }
 }

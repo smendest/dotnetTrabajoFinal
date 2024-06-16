@@ -5,9 +5,9 @@ public class CasoDeUsoListarUsuarios(IUsuarioRepositorio repo, IServicioAutoriza
   public List<Usuario> Ejecutar(int idUsuario)
   {
     // Verificacación de permisos del usuario.
-    if (!autorizacion.PoseeElPermiso(idUsuario, Permiso.UsuariosListar))
-      throw new AutorizacionException();
-    else
+    if (autorizacion.PoseeElPermiso(idUsuario, Permiso.UsuariosListar))
       return repo.ConsultarTodos();
+    else
+      throw new AutorizacionException();
   }
 }

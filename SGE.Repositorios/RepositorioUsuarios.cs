@@ -12,6 +12,12 @@ public class RepositorioUsuario : IUsuarioRepositorio
     db.SaveChanges(); //actualiza la base de datos. SQlite establece el valor de usuario.Id
   }
 
+  public bool EsPrimerUsuario()
+  {
+    using var db = new RepoContext();
+    return !db.Usuarios.Any();
+  }
+
   public void BajaDeUsuario(int id)
   {
     using var db = new RepoContext();
