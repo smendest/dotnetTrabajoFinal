@@ -6,9 +6,9 @@ using SGE.Repositorios;
 public class AccionesExpediente
 {
   static IExpedienteRepositorio RepoExpedientes { get; } = new RepositorioExpedientes();
-  static ITramiteRepositorio RepoTramites { get; } = new RepositorioTramitesTXT();
+  static IUsuarioRepositorio RepoUsuarios { get; } = new RepositorioUsuario();
   static ExpedienteValidador Validador { get; } = new ExpedienteValidador();
-  static IServicioAutorizacion Autorizacion { get; } = new ServicioAutorizacionProvisorio();
+  static IServicioAutorizacion Autorizacion { get; } = new ServicioAutorizacion(RepoUsuarios);
 
   public static void Agregar(int userId)
   {

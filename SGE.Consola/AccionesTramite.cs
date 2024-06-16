@@ -6,9 +6,10 @@ using SGE.Repositorios;
 public class AccionesTramite
 {
   static IExpedienteRepositorio RepoExpedientes { get; } = new RepositorioExpedientes();
-  static ITramiteRepositorio RepoTramites { get; } = new RepositorioTramitesTXT();
+  static ITramiteRepositorio RepoTramites { get; } = new RepositorioTramites();
+  static IUsuarioRepositorio RepoUsuarios { get; } = new RepositorioUsuario();
   static TramiteValidador Validador { get; } = new TramiteValidador();
-  static IServicioAutorizacion Autorizacion { get; } = new ServicioAutorizacionProvisorio();
+  static IServicioAutorizacion Autorizacion { get; } = new ServicioAutorizacion(RepoUsuarios);
   static IEspecificacionCambioEstado Especificacion { get; } = new EspecificacionCambioEstado();
   static IServicioActualizacionEstado ActualizacionEstado { get; } = new ServicioActualizacionEstado(RepoTramites, RepoExpedientes, Especificacion);
 

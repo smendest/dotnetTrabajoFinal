@@ -2,7 +2,7 @@
 
 namespace SGE.Repositorios;
 
-public class RepositorioTramitesTXT : ITramiteRepositorio
+public class RepositorioTramites : ITramiteRepositorio
 {
   public void AgregarTramite(Tramite tramite)
   {
