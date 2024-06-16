@@ -9,6 +9,8 @@ public enum Permiso
   TramiteAlta,
   TramiteBaja,
   TramiteModificacion,
-  // Admin,
-  // Solo lectura?
+  UsuarioAlta,
+  UsuarioBaja,
+  UsuarioModificacion,
+  UsuariosListar,
 }
