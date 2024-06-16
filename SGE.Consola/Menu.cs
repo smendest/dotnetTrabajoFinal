@@ -5,7 +5,7 @@ public class Menu
   public static void Ejecutar(int userId)
   {
     bool exit = false;
-    int option = 999;
+    int option;
     while (!exit)
     {
 
@@ -24,14 +24,16 @@ public class Menu
       Console.WriteLine("8) Modificar un trámite");
       Console.WriteLine("9) Solicitar listado de trámites con una etiqueta determinada");
       Console.WriteLine();
-      Console.WriteLine("Para salir del programa ingrese 0");
+      Console.WriteLine("Acciones sobre Usuarios (solo admin):");
+      Console.WriteLine("10) Ir al Menú de administrador");
+      Console.WriteLine("0) Para salir del programa");
       try
       {
         option = int.Parse(Console.ReadLine() ?? " ");
       }
       catch
       {
-        // Asignamos valos para que caiga en la opción default y siga su flujo
+        // Asignamos valor para que caiga en la opción default y siga su flujo
         option = 999;
       }
 
@@ -66,6 +68,12 @@ public class Menu
           break;
         case 9:
           AccionesTramite.ListarPorEtiqueta();
+          break;
+        case 10:
+          if (userId == 1)
+            MenuAdmin.Ejecutar();
+          else
+            Console.WriteLine("No posee los permisos necesarios para acceder al menú admin");
           break;
 
         default:

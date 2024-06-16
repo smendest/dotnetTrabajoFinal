@@ -14,7 +14,8 @@ public class AccionesUsuario
     {
       var crearNuevoUsuario = new CasoDeUsoUsuarioAlta(RepoUsuarios);
       Console.WriteLine(">>>> ALTA DE USUARIO <<<<");
-      Usuario nuevoUsuario = IngresarUsuarioPorTeclado();
+      Usuario nuevoUsuario = new Usuario();
+      IngresarUsuarioPorTeclado(nuevoUsuario);
       crearNuevoUsuario.Ejecutar(nuevoUsuario);
       SuccesLog();
     }
@@ -55,7 +56,7 @@ public class AccionesUsuario
       Console.WriteLine("El usuario que desea modificar es el siguiente:");
       Console.WriteLine(usuario);
       Console.WriteLine();
-      Usuario usuarioModificado = IngresarUsuarioPorTeclado();
+      Usuario usuarioModificado = IngresarUsuarioPorTeclado(usuario);
       // TODO: Mostrar los permisos existentes
       EditarPermisos(usuario.Permisos);
       modificarUsuario.Ejecutar(usuarioModificado, idUsuarioActual);
@@ -66,9 +67,8 @@ public class AccionesUsuario
     }
   }
 
-  private static Usuario IngresarUsuarioPorTeclado()
+  private static Usuario IngresarUsuarioPorTeclado(Usuario usuario)
   {
-    Usuario usuario = new Usuario();
     Console.Write("Ingrese nombre: ");
     usuario.Nombre = Console.ReadLine() ?? "";
     Console.Write("Ingrese apellido: ");
@@ -83,8 +83,10 @@ public class AccionesUsuario
 
   private static void EditarPermisos(List<Permiso> permisosExistentes)
   {
-    Console.WriteLine("AGREGAR Permiso: Ingrese el número de opción POSITIVO (Ej: 5) del permiso que deseada agregar (de a uno por vez): ");
-    Console.WriteLine("QUITAR Permiso: Ingrese el número de opción NEGATIVO (Ej: -5) del permiso que deseada quitar (de a uno por vez): ");
+    Console.WriteLine("\nEditar permisos de usuario:");
+    Console.WriteLine("- AGREGAR Permiso: Ingrese el número de opción POSITIVO (Ej: 5) del permiso que deseada agregar (de a uno por vez): ");
+    Console.WriteLine("- QUITAR Permiso: Ingrese el número de opción NEGATIVO (Ej: -5) del permiso que deseada quitar (de a uno por vez): ");
+    Console.WriteLine();
     Console.WriteLine("0) Ninguno");
     Console.WriteLine("1) ExpedienteAlta");
     Console.WriteLine("2) ExpedienteBaja");
