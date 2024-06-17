@@ -62,7 +62,7 @@ modificaciones:
 + [x] Establecer la propiedad journal mode de la base de datos sqlite en DELETE ???
 
 ### Interfaz de Usuario:
-- [ ] Descartar el proyecto SGE.Consola de la primera entrega.
+- [x] Descartar el proyecto SGE.Consola de la primera entrega.
 - [ ] Desarrollar una nueva interfaz de usuario en un proyecto llamado SGE.UI utilizando Blazor. Diseñar libremente esta interfaz de manera que toda la funcionalidad desarrollada en la primera entrega sea accesible desde esta interfaz, agregando la gestión de usuarios requerida.
 
 ### Acceso Administrativo:
