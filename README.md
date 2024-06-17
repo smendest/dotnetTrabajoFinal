@@ -53,11 +53,13 @@ modificaciones:
 - [x] Desarrollar el servicio de autorización ServicioAutorizacion que implemente la interfaz IServicioAutorizacion, reemplazando al servicio de autorización provisorio de la entrega inicial
 - [x] Este servicio debe verificar realmente si el usuario tiene el permiso requerido.
 
-+ [ ] Establecer la propiedad journal mode de la base de datos sqlite en DELETE
-
 ### Almacenamiento del hash
-- [ ] El hash de la contraseña debe almacenarse en la base de datos, nunca la contraseña en sí. Para verificar la identidad del usuario al iniciar sesión, se vuelve a calcular el hash de la contraseña ingresada y se compara con el hash almacenado.
-- [ ] Si los hashes coinciden, el usuario ha ingresado la contraseña correcta y se le permite acceder al sistema.
+- [x] El hash de la contraseña debe almacenarse en la base de datos, nunca la contraseña en sí. Para verificar la identidad del usuario al iniciar sesión, se vuelve a calcular el hash de la contraseña ingresada y se compara con el hash almacenado.
+- [x] Si los hashes coinciden, el usuario ha ingresado la contraseña correcta y se le permite acceder al sistema.
+
++ [x] CasoDeUso modificar usuario propio (flujo de gestión)
++ [ ] Establecer la propiedad journal mode de la base de datos sqlite en DELETE ???
++ [ ] SignIn con email en lugar de id
 
 ### Interfaz de Usuario:
 - [ ] Descartar el proyecto SGE.Consola de la primera entrega.
@@ -71,7 +73,7 @@ modificaciones:
 - [ ] En caso de registro, se proporcionará un formulario para ingresar los datos personales y establecer una contraseña.
 - [ ] Los usuarios tendrán la libertad de modificar sus datos personales y contraseña en cualquier momento.
 - [ ] Por simplicidad no se implementará ningún mecanismo de recuperación de contraseña. En caso de olvido de contraseña, el usuario deberá contactar al Administrador para restablecerla.
-- [ ] Las contraseñas no se almacenarán directamente en la base de datos; en su lugar, se utilizará una función de hash para mayor seguridad.
+- [x] Las contraseñas no se almacenarán directamente en la base de datos; en su lugar, se utilizará una función de hash para mayor seguridad.
 
 
 
