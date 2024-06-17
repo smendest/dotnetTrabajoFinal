@@ -19,7 +19,7 @@ public class CasoDeUsoTramiteBaja(
     {
       throw new AutorizacionException();
     }
-    Tramite tramite = repoTramite.GetTramiteById(idTramite);  // Para pasarle el Expediente asociado al servicio de actualizacion de estado.
+    Tramite tramite = repoTramite.GetTramiteById(idTramite);  // Para pasarle el id del Expediente asociado al servicio de actualizacion de estado.
     repoTramite.EliminarTramite(idTramite);
     actualizacionEstado.ActualizarEstadoExpediente(tramite.ExpedienteId);
 
