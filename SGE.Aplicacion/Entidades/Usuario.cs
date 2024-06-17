@@ -15,7 +15,7 @@ public class Usuario
 
   public override string ToString()
   {
-    string permisos = Permisos.Any() ? string.Join(", ", Permisos) : "No tiene permisos";
+    string permisos = Permisos.Any() ? string.Join(", ", Permisos) : "Permiso de solo lectura";
     return $"Id:{Id} - Nombre: {Nombre}, Apellido: {Apellido}, Email: {Email}, Password: {Password}, IsAdmin: {(IsAdmin ? "SI" : "NO")}, Permisos: [{permisos}] ";
   }
 
