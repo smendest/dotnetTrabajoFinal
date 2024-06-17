@@ -2,8 +2,8 @@
 
 public class CasoDeUsoUsuarioAutenticar(IUsuarioRepositorio repo)
 {
-  public void Ejecutar(int idUsuario, string password)
+  public void Ejecutar(string email, string password, out int idUsuario)
   {
-    repo.AutenticarUsuario(idUsuario, password);
+    repo.AutenticarUsuario(email, password, out idUsuario);
   }
 }

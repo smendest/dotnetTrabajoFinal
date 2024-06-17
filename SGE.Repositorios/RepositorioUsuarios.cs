@@ -59,14 +59,16 @@ public class RepositorioUsuario : IUsuarioRepositorio
 
   }
 
-  public void AutenticarUsuario(int id, string password)
+  public void AutenticarUsuario(string email, string password, out int idUsuario)
   {
     using var db = new RepoContext();
-    Usuario usuario = GetUserById(id);
+    var usuario = db.Usuarios.Where(
+     e => e.Email == email).SingleOrDefault();
     if (usuario == null || !VerificarPassword(password, usuario.Password))
     {
       throw new RepositorioException("Email o contraseña incorrectos");
     }
+    idUsuario = usuario.Id;
   }
 
   public bool VerificarPassword(string passwordIngresada, string hashAlmacenado)

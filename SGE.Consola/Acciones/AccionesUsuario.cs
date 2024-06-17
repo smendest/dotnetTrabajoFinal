@@ -204,20 +204,21 @@ public class AccionesUsuario
 
   public static bool Autenticar(out int id)
   {
-    Console.Write("Ingrese id de usuario: ");
-    id = int.Parse(Console.ReadLine() ?? "0");
+    Console.Write("Ingrese email: ");
+    string email = Console.ReadLine() ?? "";
     Console.Write("Ingrese contraseña: ");
     string password = Console.ReadLine() ?? "";
     try
     {
       var autenticarUsuario = new CasoDeUsoUsuarioAutenticar(RepoUsuarios);
-      autenticarUsuario.Ejecutar(id, password);
+      autenticarUsuario.Ejecutar(email, password, out id);
       SuccesLog();
       return true;
     }
     catch (Exception e)
     {
       Console.WriteLine(e.Message);
+      id = 0; // En caso de excepcionar se devuelve un valor genérico de id
       return false;
     }
   }
