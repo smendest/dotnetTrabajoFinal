@@ -7,6 +7,8 @@ public class RepositorioUsuario : IUsuarioRepositorio
   public void AltaDeUsuario(Usuario usuario)
   {
     using var db = new RepoContext();
+    // Hash de la contraseña
+    usuario.Password = HashHelper.ComputeSha256Hash(usuario.Password);
     // el Id será establecido por SQLite
     db.Add(usuario); // se agregará realmente con el db.SaveChanges()
     db.SaveChanges(); //actualiza la base de datos. SQlite establece el valor de usuario.Id
@@ -41,9 +43,13 @@ public class RepositorioUsuario : IUsuarioRepositorio
       usuario.Nombre = uModificado.Nombre;
       usuario.Apellido = uModificado.Apellido;
       usuario.Email = uModificado.Email;
-      usuario.Password = uModificado.Password;
       usuario.Permisos = uModificado.Permisos;
 
+      // Solo actualizar el hash si la contraseña ha cambiado
+      if (usuario.Password != uModificado.Password)
+      {
+        usuario.Password = HashHelper.ComputeSha256Hash(uModificado.Password);
+      }
       db.SaveChanges(); //actualiza la base de datos.
     }
     else

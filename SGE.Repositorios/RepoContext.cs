@@ -17,29 +17,5 @@ public class RepoContext : DbContext
     optionsBuilder.UseSqlite("data source=../SGE.Repositorios/Repositorios.sqlite");
   }
 
-  // protected override void OnModelCreating(ModelBuilder modelBuilder)
-  // {
-  //   modelBuilder.Entity<Expediente>()
-  //       .HasMany(a => a.TramitesAsociados)
-  //       .WithOne()
-  //       .HasForeignKey(b => b.ExpedienteId)
-  //       .OnDelete(DeleteBehavior.Cascade);
-
-  //   modelBuilder.Entity<Usuario>()
-  //       .HasMany(a => a.ExpedientesAsociados)
-  //       .WithOne()
-  //       .HasForeignKey(b => b.UserId)
-  //       .OnDelete(DeleteBehavior.Cascade);
-
-
-  //   modelBuilder.Entity<Usuario>()
-  //       .HasMany(a => a.TramitesAsociados)
-  //       .WithOne()
-  //       .HasForeignKey(b => b.UserId)
-  //       .OnDelete(DeleteBehavior.Cascade);
-
-
-  //   base.OnModelCreating(modelBuilder);
-  // }
 }
 
