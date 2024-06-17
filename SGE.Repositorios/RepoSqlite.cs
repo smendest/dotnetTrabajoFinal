@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion;
+﻿using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion;
 
 namespace SGE.Repositorios;
 
@@ -51,6 +52,13 @@ public class RepoSqlite
       });
 
       context.SaveChanges();
+    }
+    var connection = context.Database.GetDbConnection();
+    connection.Open();
+    using (var command = connection.CreateCommand())
+    {
+      command.CommandText = "PRAGMA journal_mode=DELETE;";
+      command.ExecuteNonQuery();
     }
   }
 }

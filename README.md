@@ -58,8 +58,8 @@ modificaciones:
 - [x] Si los hashes coinciden, el usuario ha ingresado la contraseña correcta y se le permite acceder al sistema.
 
 + [x] CasoDeUso modificar usuario propio (flujo de gestión)
-+ [ ] Establecer la propiedad journal mode de la base de datos sqlite en DELETE ???
-+ [ ] SignIn con email en lugar de id
++ [x] SignIn con email en lugar de id
++ [x] Establecer la propiedad journal mode de la base de datos sqlite en DELETE ???
 
 ### Interfaz de Usuario:
 - [ ] Descartar el proyecto SGE.Consola de la primera entrega.
