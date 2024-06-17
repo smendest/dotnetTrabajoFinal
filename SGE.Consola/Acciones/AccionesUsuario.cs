@@ -67,6 +67,18 @@ public class AccionesUsuario
     }
   }
 
+  public static void EditarPerfilPropio(int id)
+  {
+    var modificarUsuario = new CasoDeUsoUsuarioModificacion(RepoUsuarios, Autorizacion);
+    Usuario usuario = RepoUsuarios.GetUserById(id);
+    Console.WriteLine("Perfil actual: ");
+    Console.WriteLine(usuario);
+    Console.WriteLine();
+    Console.WriteLine("Ingrese los datos nuevos");
+    Usuario usuarioModificado = IngresarUsuarioPorTeclado(usuario);
+    modificarUsuario.Ejecutar(usuarioModificado, id);
+  }
+
   private static Usuario IngresarUsuarioPorTeclado(Usuario usuario)
   {
     Console.Write("Ingrese nombre: ");

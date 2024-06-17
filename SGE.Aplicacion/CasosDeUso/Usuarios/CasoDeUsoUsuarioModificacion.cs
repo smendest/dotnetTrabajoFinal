@@ -5,7 +5,7 @@ public class CasoDeUsoUsuarioModificacion(IUsuarioRepositorio repo, IServicioAut
   public void Ejecutar(Usuario usuarioModificado, int idUsuarioActual)
   {
     // Verificacación de permisos del usuario.
-    if (autorizacion.PoseeElPermiso(idUsuarioActual, Permiso.UsuarioModificacion))
+    if (autorizacion.PoseeElPermiso(idUsuarioActual, Permiso.UsuarioModificacion) || (usuarioModificado.Id == idUsuarioActual))
       repo.ModificarUsuario(usuarioModificado);
     else
       throw new AutorizacionException();

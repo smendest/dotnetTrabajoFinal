@@ -24,8 +24,9 @@ public class MenuPrincipal
       Console.WriteLine("8) Modificar un trámite");
       Console.WriteLine("9) Solicitar listado de trámites con una etiqueta determinada");
       Console.WriteLine();
-      Console.WriteLine("Acciones sobre Usuarios (solo admin):");
-      Console.WriteLine("10) Ir al Menú de administrador");
+      Console.WriteLine("Acciones sobre Usuarios:");
+      Console.WriteLine("10) Ir al Menú de administrador (solo usuario admin)");
+      Console.WriteLine("11) Editar perfil de usuario");
       Console.WriteLine("0) Para salir del programa");
       try
       {
@@ -75,19 +76,25 @@ public class MenuPrincipal
           else
             Console.WriteLine("No posee los permisos necesarios para acceder al menú admin");
           break;
+        case 11:
+          AccionesUsuario.EditarPerfilPropio(userId);
+          break;
 
         default:
           ShowErr();
           break;
       }
 
-      string otraAccion = "";
-      while ((otraAccion != "y") && (otraAccion != "n"))
+      if (!exit)
       {
-        Console.WriteLine("\n¿Desea realizar otra acción? (y/n)");
-        otraAccion = Console.ReadLine() ?? "";
+        string otraAccion = "";
+        while ((otraAccion != "y") && (otraAccion != "n"))
+        {
+          Console.WriteLine("\n¿Desea realizar otra acción? (y/n)");
+          otraAccion = Console.ReadLine() ?? "";
+        }
+        if (otraAccion == "n") exit = true;
       }
-      if (otraAccion == "n") exit = true;
     }
   }
 
