@@ -8,7 +8,7 @@ public class RepositorioUsuario : IUsuarioRepositorio
   {
     using var db = new RepoContext();
     // Hash de la contraseña
-    usuario.Password = HashHelper.ComputeSha256Hash(usuario.Password);
+    usuario.Password = HashHelper.HashPassword(usuario.Password);
     // el Id será establecido por SQLite
     db.Add(usuario); // se agregará realmente con el db.SaveChanges()
     db.SaveChanges(); //actualiza la base de datos. SQlite establece el valor de usuario.Id
@@ -48,7 +48,7 @@ public class RepositorioUsuario : IUsuarioRepositorio
       // Solo actualizar el hash si la contraseña ha cambiado
       if (usuario.Password != uModificado.Password)
       {
-        usuario.Password = HashHelper.ComputeSha256Hash(uModificado.Password);
+        usuario.Password = HashHelper.HashPassword(uModificado.Password);
       }
       db.SaveChanges(); //actualiza la base de datos.
     }
@@ -59,6 +59,23 @@ public class RepositorioUsuario : IUsuarioRepositorio
 
   }
 
+  public void AutenticarUsuario(int id, string password)
+  {
+    using var db = new RepoContext();
+    Usuario usuario = GetUserById(id);
+    if (usuario == null || !VerificarPassword(password, usuario.Password))
+    {
+      throw new RepositorioException("Email o contraseña incorrectos");
+    }
+  }
+
+  public bool VerificarPassword(string passwordIngresada, string hashAlmacenado)
+  {
+    // Hashear la contraseña ingresada
+    string hashIngresado = HashHelper.HashPassword(passwordIngresada);
+    // Comparar el hash ingresado con el hash almacenado
+    return hashIngresado == hashAlmacenado;
+  }
 
   public List<Usuario> ConsultarTodos()
   {

@@ -1,6 +1,6 @@
 ﻿namespace SGE.Consola;
 
-public class Menu
+public class MenuPrincipal
 {
   public static void Ejecutar(int userId)
   {

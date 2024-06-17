@@ -26,22 +26,15 @@ using var context = new RepoContext();
   Console.WriteLine("Inicializacion de base de datos finalizada \n");
 }
 
-Console.WriteLine("Ingrese su id de usuario: ");
-bool idValido = false;
-int userId = 0;
-while (!idValido)
-{
-  string? input = Console.ReadLine();
-  if (string.IsNullOrWhiteSpace(input))
-  {
-    Console.WriteLine("Ingrese un id válido (número entero positivo).");
-  }
-  else
-  {
-    userId = int.Parse(input);
-    idValido = true;
-  }
-}
+Console.WriteLine("Ya tiene un usuario? y/n");
+string opt = Console.ReadLine() ?? "";
 
-Menu.Ejecutar(userId);
+if (opt == "y")
+{
+  SignInForm.Ejecutar();
+}
+else
+{
+  SignUpForm.Ejecutar();
+}
 

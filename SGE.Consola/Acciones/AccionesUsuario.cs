@@ -75,7 +75,7 @@ public class AccionesUsuario
     usuario.Apellido = Console.ReadLine() ?? "";
     Console.Write("Ingrese correo electrónico: ");
     usuario.Email = Console.ReadLine() ?? "";
-    Console.Write("Ingrese correo contraseña: ");
+    Console.Write("Ingrese contraseña: ");
     usuario.Password = Console.ReadLine() ?? "";
     return usuario;
 
@@ -187,6 +187,26 @@ public class AccionesUsuario
     catch (Exception e)
     {
       Console.WriteLine(e.Message);
+    }
+  }
+
+  public static bool Autenticar(out int id)
+  {
+    Console.Write("Ingrese id de usuario: ");
+    id = int.Parse(Console.ReadLine() ?? "0");
+    Console.Write("Ingrese contraseña: ");
+    string password = Console.ReadLine() ?? "";
+    try
+    {
+      var autenticarUsuario = new CasoDeUsoUsuarioAutenticar(RepoUsuarios);
+      autenticarUsuario.Ejecutar(id, password);
+      SuccesLog();
+      return true;
+    }
+    catch (Exception e)
+    {
+      Console.WriteLine(e.Message);
+      return false;
     }
   }
 

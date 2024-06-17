@@ -8,5 +8,7 @@ public interface IUsuarioRepositorio
   void ModificarUsuario(Usuario uModificado);
   List<Usuario> ConsultarTodos();
   Usuario GetUserById(int id);
+  void AutenticarUsuario(int id, string password);
+
 
 }

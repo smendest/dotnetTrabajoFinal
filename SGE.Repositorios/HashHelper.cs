@@ -5,7 +5,7 @@ using System.Text;
 
 public static class HashHelper
 {
-  public static string ComputeSha256Hash(string rawData)
+  public static string HashPassword(string rawData)
   {
     // Crear una instancia de SHA256
     using (SHA256 sha256Hash = SHA256.Create())
