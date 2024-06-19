@@ -1,0 +1,33 @@
+﻿@page "/modificarexpediente/{Id:int?}"
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoExpedienteModificacion modificarExpediente
+@inject CasoDeUsoExpedienteConsultaPorId getExpById
+@inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
+
+@* TODO: Must receive user Id and pass it to the use case *@
+<h3>Modificando al Cliente "@_expediente.Id" - "@_expediente.Caratula"</h3>
+<input placeholder="Caratula" @bind="_expediente.Caratula" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code {
+  Expediente _expediente = new Expediente();
+  [Parameter] public int? Id { get; set; }
+  protected override void OnParametersSet()
+  {
+    if (Id != null)
+    {
+      var exp_hallado = getExpById.Ejecutar(Id.Value);
+      if (exp_hallado != null)
+      {
+        _expediente = exp_hallado;
+      }
+    }
+  }
+  void Aceptar()
+  {
+    modificarExpediente.Ejecutar(_expediente, 1);
+    _expediente = new Expediente();
+    Navegador.NavigateTo("listadoexpedientes");
+  }
+}

@@ -1,0 +1,19 @@
+﻿@page "/agregarexpediente{userId}"
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoExpedienteAlta agregarExpediente
+@inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
+
+<input placeholder="Caratula" @bind="_expediente.Caratula" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code {
+  [Parameter] public int userId { get; set; }
+  Expediente _expediente = new Expediente();
+  void Aceptar()
+  {
+    agregarExpediente.Ejecutar(_expediente, userId);
+    _expediente = new Expediente();
+    Navegador.NavigateTo("listadoexpedientes");
+  }
+}

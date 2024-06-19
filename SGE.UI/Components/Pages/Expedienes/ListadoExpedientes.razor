@@ -1,0 +1,81 @@
+﻿@page "/listadoexpedientes"
+@rendermode InteractiveServer
+@inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
+@inject CasoDeUsoExpedienteBaja eliminarExpediente
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Carátula</th>
+      <th>Fecha de Creación</th>
+      <th>Fecha de Modificación</th>
+      <th>Id usuario</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var exp in _lista)
+    {
+      <tr>
+        <td>@exp.Id</td>
+        <td>@exp.Caratula</td>
+        <td>@exp.FechaCreacion</td>
+        <td>@exp.FechaUltimaModif</td>
+        <td>@exp.UserId</td>
+        <td>@exp.Estado</td>
+        <td>
+          <button class="btn btn-primary" @onclick="()=>ModificarExpediente(exp)">Editar</button>
+          <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(exp)">Eliminar</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@code {
+
+  List<Expediente> _lista = new List<Expediente>();
+  protected override void OnInitialized()
+  {
+    try
+    {
+
+      _lista = ConsultarTodos.Ejecutar();
+    }
+    catch (Exception e)
+    {
+      Console.WriteLine(e.Message);
+    }
+  }
+  DialogoConfirmacion dialogo = null!;
+  Expediente? _expParaEliminar = null;
+  private void ConfirmarEliminacion(Expediente exp)
+  {
+    _expParaEliminar = exp;
+    dialogo.Mensaje = $"¿Desea eliminar al expediente {exp.Id} - {exp.Caratula}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_expParaEliminar != null)
+    {
+      try
+      {
+
+        eliminarExpediente.Ejecutar(_expParaEliminar.Id, 1);
+        _lista = ConsultarTodos.Ejecutar();
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e.Message);
+      }
+    }
+  }
+  void ModificarExpediente(Expediente exp)
+  {
+    Navegador.NavigateTo($"modificarexpediente/{exp.Id}");
+  }
+}
