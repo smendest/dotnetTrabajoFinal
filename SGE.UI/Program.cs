@@ -29,6 +29,7 @@ builder.Services.AddScoped<IUsuarioRepositorio, RepositorioUsuario>();
 // Dependendias de los casos de uso
 builder.Services.AddTransient<ExpedienteValidador>();
 builder.Services.AddTransient<TramiteValidador>();
+builder.Services.AddTransient<ServicioAutenticacion>();
 builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
 builder.Services.AddScoped<IEspecificacionCambioEstado, EspecificacionCambioEstado>();
 builder.Services.AddScoped<IServicioActualizacionEstado, ServicioActualizacionEstado>();
