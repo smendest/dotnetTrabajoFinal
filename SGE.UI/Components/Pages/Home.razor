@@ -1,7 +1,39 @@
 ﻿@page "/"
+@inject CasoDeUsoUsuarioAutenticar AutenticarUsuario
+@inject NavigationManager NavigationManager
 
-<PageTitle>Home</PageTitle>
+<h1>Iniciar sesión</h1>
 
-<h1>Hello, world!</h1>
+<form>
+  <label for="email">Email:</label>
+  <input type="email" id="email" @bind="email" />
+  <br />
 
-Welcome to your new app.
+  <label for="password">Password:</label>
+  <input type="password" id="password" @bind="password" />
+  <br />
+
+  <button @onclick="Autenticar">Sign In</button>
+</form>
+
+@code {
+  string? email;
+  string? password;
+  int userId;
+  private void Autenticar()
+  {
+    try
+    {
+      if ((email != null) && (password != null))
+      {
+        AutenticarUsuario.Ejecutar(email, password, out userId);
+        NavigationManager.NavigateTo("/");
+      }
+      else throw new Exception("Debe ingresar email y password");
+    }
+    catch (Exception e)
+    {
+      Console.WriteLine(e.Message);
+    }
+  }
+}
