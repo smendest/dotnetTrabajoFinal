@@ -3,6 +3,7 @@ using SGE.UI.Components;
 //agregamos estas directivas using
 using SGE.Repositorios;
 using SGE.Aplicacion;
+using System.Diagnostics;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,5 +53,31 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+/*Inicializamos base de datos*/
+RepoSqlite.Inicializar();
+using var context = new RepoContext();
+{
+    Debug.WriteLine("Inicializacion de base de datos\n");
+    Debug.WriteLine("-- Tabla Expedientes --");
+    foreach (var exp in context.Expedientes)
+    {
+        Debug.WriteLine($"Id:{exp.Id} {exp.Caratula} -  Creado: {exp.FechaCreacion} - Modificado: {exp.FechaUltimaModif} - Estado: {exp.Estado} - Id de Usuario: {exp.UserId} ");
+    }
+
+    Debug.WriteLine("\n-- Tabla Tramites --");
+    foreach (var tr in context.Tramites)
+    {
+        Debug.WriteLine($"Id:{tr.Id} - {tr.Contenido} - {tr.Etiqueta} - Expediente asociado: {tr.ExpedienteId} - Usuario: {tr.UserId}-  Creado: {tr.FechaCreacion} - Modificado: {tr.FechaUltimaModif}");
+    }
+
+    Debug.WriteLine("\n-- Tabla Usuarios --");
+    foreach (var user in context.Usuarios)
+    {
+        Debug.WriteLine($"Id:{user.Id} - Nombre: {user.Nombre}, Apellido: {user.Apellido}, Email: {user.Email}, Password: {user.Password} ");
+    }
+    Debug.WriteLine("Inicializacion de base de datos finalizada \n");
+}
+
 
 app.Run();
