@@ -1,0 +1,32 @@
+﻿@page "/modificartramite/{Id:int?}"
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoTramiteModificacion modificarTramite
+@inject CasoDeUsoTramiteConsultaPorId getExpById
+
+@* TODO: Must receive user Id and pass it to the use case *@
+<h3>Modificando al Tramite "@_tramite.Id" - "@_tramite.Contenido"</h3>
+<input placeholder="Contenido" @bind="_tramite.Contenido" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@code {
+  Tramite _tramite = new Tramite();
+  [Parameter] public int? Id { get; set; }
+  protected override void OnParametersSet()
+  {
+    if (Id != null)
+    {
+      var exp_hallado = getExpById.Ejecutar(Id.Value);
+      if (exp_hallado != null)
+      {
+        _tramite = exp_hallado;
+      }
+    }
+  }
+  void Aceptar()
+  {
+    modificarTramite.Ejecutar(_tramite, 1);
+    _tramite = new Tramite();
+    Navegador.NavigateTo("menutramites");
+  }
+}

@@ -1,0 +1,103 @@
+﻿@page "/buscartramiteporid"
+@* @page "/buscartramiteporid{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoTramiteConsultaPorId GetById
+@inject CasoDeUsoTramiteBaja eliminarTramite
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<label for="id">Ingrese el Id del trámite:</label>
+<input id="id" placeholder="Id" @bind="Id" class="form-control">
+<button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+@if (MostrarExp && !ShowError)
+{
+  <h4>Información del trámite</h4>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Contenido</th>
+      <th>Etiqueta</th>
+      <th>Fecha de Creación</th>
+      <th>Fecha de Modificación</th>
+      <th>Id usuario</th>
+      <th>Id tramiteediente</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@tramite.Id</td>
+      <td>@tramite.Contenido</td>
+      <td>@tramite.Etiqueta</td>
+      <td>@tramite.FechaCreacion</td>
+      <td>@tramite.FechaUltimaModif</td>
+      <td>@tramite.UserId</td>
+      <td>@tramite.ExpedienteId</td>
+      <td>
+        <button class="btn btn-primary" @onclick="()=>ModificarTramite(tramite)">Editar</button>
+        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(tramite)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+}
+@if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+
+
+@code {
+  @* [Parameter] public int userId { get; set; } *@
+  Tramite tramite = new Tramite();
+  private int userId = 1;
+  private int Id;
+  private bool MostrarExp = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  void Buscar()
+  {
+    try
+    {
+      tramite = GetById.Ejecutar(Id);
+      MostrarExp = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+
+  DialogoConfirmacion dialogo = null!;
+  Tramite? _tramiteParaEliminar = null;
+  private void ConfirmarEliminacion(Tramite tramite)
+  {
+    _tramiteParaEliminar = tramite;
+    dialogo.Mensaje = $"¿Desea eliminar al tramite {tramite.Id} - {tramite.Contenido}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_tramiteParaEliminar != null)
+    {
+      try
+      {
+        eliminarTramite.Ejecutar(_tramiteParaEliminar.Id, userId);
+        Navegador.NavigateTo($"menutramites");
+      }
+      catch (Exception e)
+      {
+        MensajeError = e.Message;
+        ShowError = true;
+      }
+    }
+  }
+  void ModificarTramite(Tramite tramite)
+  {
+    Navegador.NavigateTo($"modificartramite/{tramite.Id}");
+  }
+}

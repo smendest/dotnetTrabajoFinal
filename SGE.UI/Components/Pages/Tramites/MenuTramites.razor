@@ -1,0 +1,25 @@
+﻿@page "/menutramites"
+@* @page "menutramites{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+<div class="vertical">
+  <button class="btn btn-primary" @onclick="GoToAgregarTramite">Agregar Trámite</button>
+  <button class="btn btn-primary" @onclick="GoToBuscarTramitePorid">Buscar Trámite por Id</button>
+  <button class="btn btn-primary" @onclick="GoToBuscarTramitesPorEtiqueta">Buscar Trámites por Etiqueta</button>
+</div>
+
+@code {
+  @* [Parameter] public int userId { get; set; } *@
+  void GoToAgregarTramite()
+  {
+    Navegador.NavigateTo("agregartramite");
+  }
+  void GoToBuscarTramitePorid()
+  {
+    Navegador.NavigateTo("buscartramiteporid");
+  }
+  void GoToBuscarTramitesPorEtiqueta()
+  {
+    Navegador.NavigateTo("buscartramiteporetiqueta");
+  }
+}

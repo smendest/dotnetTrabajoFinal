@@ -1,12 +1,13 @@
-﻿@page "/obtenerexpedienteporid"
-@* @page "/obtenerexpedienteporid{userId}" *@
+﻿@page "/buscarexpporid"
+@* @page "/buscarexpporid{userId}" *@
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoExpedienteConsultaPorId GetById
 @inject CasoDeUsoExpedienteBaja eliminarExpediente
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
-<input placeholder="Id" @bind="Id" class="form-control">
+<label for="id">Ingrese el Id del expediente:</label>
+<input id="id" placeholder="Id" @bind="Id" class="form-control">
 <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
 @if (MostrarExp && !ShowError)
 {
@@ -112,8 +113,16 @@
   {
     if (_expParaEliminar != null)
     {
-      eliminarExpediente.Ejecutar(_expParaEliminar.Id, userId);
-      Navegador.NavigateTo($"listadoexpedientes");
+      try
+      {
+        eliminarExpediente.Ejecutar(_expParaEliminar.Id, userId);
+        Navegador.NavigateTo($"listadoexpedientes");
+      }
+      catch (Exception e)
+      {
+        MensajeError = e.Message;
+        ShowError = true;
+      }
     }
   }
   void ModificarExpediente(Expediente exp)

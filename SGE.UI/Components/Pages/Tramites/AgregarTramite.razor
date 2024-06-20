@@ -1,0 +1,37 @@
+﻿@page "/agregartramite"
+@* @page "agregartramite{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoTramiteAlta agregarTramite
+
+<label for="contenido">Contenido:</label>
+<input id="contenido" placeholder="Contenido" @bind="_tramite.Contenido" class="form-control">
+<label for="idexp">Id del expediente asociado al trámite:</label>
+<input id="idexp" placeholder="Id de expediente asociado" @bind="_tramite.ExpedienteId" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+@if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+
+@code {
+  @* [Parameter] public int userId { get; set; } *@
+  private int userId = 1;
+  Tramite _tramite = new Tramite();
+  private bool ShowError { get; set; } = false;
+  private string MensajeError { get; set; } = "Ocurrió un error";
+  void Aceptar()
+  {
+    try
+    {
+      agregarTramite.Ejecutar(_tramite, userId);
+      _tramite = new Tramite();
+      Navegador.NavigateTo("menutramites");
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+}

@@ -1,0 +1,113 @@
+﻿@page "/buscartramiteporetiqueta"
+@* @page "/buscartramiteporetiqueta{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoTramiteConsultaPorEtiqueta GetByTag
+@inject CasoDeUsoTramiteBaja eliminarTramite
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<label for="tag">Ingrese la Etiqueta:</label>
+@* <input id="tag" placeholder="Etiqueta" @bind="etiqueta" class="form-control"> *@
+
+<select id="tag" @bind="etiqueta" class="form-control">
+  <option value="">Seleccione una opción</option>
+  <option value="EscritoPresentado">@EtiquetaTramite.EscritoPresentado</option>
+  <option value="PaseAEstudio">@EtiquetaTramite.PaseAEstudio</option>
+  <option value="Despacho">@EtiquetaTramite.Despacho</option>
+  <option value="Resolucion">@EtiquetaTramite.Resolucion</option>
+  <option value="Notificacion">@EtiquetaTramite.Notificacion</option>
+  <option value="PaseAlArchivo">@EtiquetaTramite.PaseAlArchivo</option>
+</select>
+
+
+
+<button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+@if (MostrarTramites && !ShowError)
+{
+  <h4>Información del trámite</h4>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Contenido</th>
+      <th>Etiqueta</th>
+      <th>Fecha de Creación</th>
+      <th>Fecha de Modificación</th>
+      <th>Id usuario</th>
+      <th>Id tramiteediente</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var tramite in listaTramites)
+      {
+        <tr>
+          <td>@tramite.Id</td>
+          <td>@tramite.Contenido</td>
+          <td>@tramite.Etiqueta</td>
+          <td>@tramite.FechaCreacion</td>
+          <td>@tramite.FechaUltimaModif</td>
+          <td>@tramite.UserId</td>
+          <td>@tramite.ExpedienteId</td>
+          <td>
+            <button class="btn btn-primary" @onclick="()=>ModificarTramite(tramite)">Editar</button>
+            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(tramite)">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+}
+@if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+
+
+@code {
+  @* [Parameter] public int userId { get; set; } *@
+  List<Tramite> listaTramites = new List<Tramite>();
+  EtiquetaTramite etiqueta = new EtiquetaTramite();
+  private int userId = 1;
+  private bool MostrarTramites = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+
+  void Buscar()
+  {
+    try
+    {
+      listaTramites = GetByTag.Ejecutar(etiqueta);
+      if (listaTramites.Count > 0)
+        MostrarTramites = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+
+  DialogoConfirmacion dialogo = null!;
+  Tramite? _tramiteParaEliminar = null;
+  private void ConfirmarEliminacion(Tramite tramite)
+  {
+    _tramiteParaEliminar = tramite;
+    dialogo.Mensaje = $"¿Desea eliminar al tramite {tramite.Id} - {tramite.Contenido}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_tramiteParaEliminar != null)
+    {
+      eliminarTramite.Ejecutar(_tramiteParaEliminar.Id, userId);
+      Navegador.NavigateTo($"menutramites");
+    }
+  }
+  void ModificarTramite(Tramite tramite)
+  {
+    Navegador.NavigateTo($"modificartramite/{tramite.Id}");
+  }
+}
