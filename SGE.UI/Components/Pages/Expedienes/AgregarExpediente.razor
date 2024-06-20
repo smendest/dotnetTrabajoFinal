@@ -1,4 +1,5 @@
-﻿@page "/agregarexpediente{userId}"
+﻿@page "/agregarexpediente"
+@* @page "/agregarexpediente{userId}" *@
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoExpedienteAlta agregarExpediente
@@ -8,8 +9,9 @@
 <button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
 
 @code {
-  [Parameter] public int userId { get; set; }
+  @* [Parameter] public int userId { get; set; } *@
   Expediente _expediente = new Expediente();
+  private int userId = 1;
   void Aceptar()
   {
     agregarExpediente.Ejecutar(_expediente, userId);

@@ -1,4 +1,5 @@
 ﻿@page "/listadoexpedientes"
+@* @page "/listadoexpedientes{userId:int}" *@
 @rendermode InteractiveServer
 @inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
 @inject CasoDeUsoExpedienteBaja eliminarExpediente
@@ -36,19 +37,11 @@
 </table>
 
 @code {
-
+  [Parameter] public int userId { get; set; }
   List<Expediente> _lista = new List<Expediente>();
   protected override void OnInitialized()
   {
-    try
-    {
-
-      _lista = ConsultarTodos.Ejecutar();
-    }
-    catch (Exception e)
-    {
-      Console.WriteLine(e.Message);
-    }
+    _lista = ConsultarTodos.Ejecutar();
   }
   DialogoConfirmacion dialogo = null!;
   Expediente? _expParaEliminar = null;
@@ -62,16 +55,8 @@
   {
     if (_expParaEliminar != null)
     {
-      try
-      {
-
-        eliminarExpediente.Ejecutar(_expParaEliminar.Id, 1);
-        _lista = ConsultarTodos.Ejecutar();
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine(e.Message);
-      }
+      eliminarExpediente.Ejecutar(_expParaEliminar.Id, userId);
+      _lista = ConsultarTodos.Ejecutar();
     }
   }
   void ModificarExpediente(Expediente exp)
