@@ -4,13 +4,17 @@
 @inject NavigationManager Navegador;
 @inject CasoDeUsoTramiteAlta agregarTramite
 
+<h3>Agregar nuevo trámite</h3>
+<br />
 <label for="contenido">Contenido:</label>
 <input id="contenido" placeholder="Contenido" @bind="_tramite.Contenido" class="form-control">
 <label for="idexp">Id del expediente asociado al trámite:</label>
 <input id="idexp" placeholder="Id de expediente asociado" @bind="_tramite.ExpedienteId" class="form-control">
+<br />
 <button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
 @if (ShowError)
 {
+  <br />
   <h4>@MensajeError</h4>
 }
 

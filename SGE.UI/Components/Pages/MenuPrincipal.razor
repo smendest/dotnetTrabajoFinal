@@ -1,0 +1,48 @@
+﻿@page "/menuprincipal"
+@* @page "/menuprincipal{userId:int}" *@
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<h1>Elija a qué menú desea acceder</h1>
+
+<button class="btn btn-primary" @onclick="GoToListadoExpedientes">Expedientes</button>
+<button class="btn btn-primary" @onclick="GoToMenuTramites">Trámites</button>
+@if (userId == 1)
+{
+  <button class="btn btn-primary" @onclick="GoToListadoUsuarios">Usuarios</button>
+}
+<button class="btn btn-primary" @onclick="GoToEditarPerfil">Modificar Perfil</button>
+@if (test)
+{
+  <p>SE EJECUTÓ</p>
+}
+
+
+@code {
+  @* [Parameter] public int userId { get; set; } = 1; *@
+  int userId { get; set; } = 1;
+  bool test = false;
+
+  void GoToListadoExpedientes()
+  {
+    @* NavigationManager.NavigateTo($"/listadoexpedientes{userId}"); *@
+    NavigationManager.NavigateTo($"listadoexpedientes");
+  }
+  void GoToMenuTramites()
+  {
+    @* NavigationManager.NavigateTo($"menutramites{userId}"); *@
+    NavigationManager.NavigateTo($"menutramites");
+  }
+  void GoToListadoUsuarios()
+  {
+    NavigationManager.NavigateTo($"listadousuarios");
+    test = true;
+
+  }
+  void GoToEditarPerfil()
+  {
+    @* NavigationManager.NavigateTo($"/editarlperfil{userId}"); *@
+    NavigationManager.NavigateTo($"editarperfil");
+
+  }
+}

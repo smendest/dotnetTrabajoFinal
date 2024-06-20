@@ -4,6 +4,7 @@
 @inject CasoDeUsoUsuarioModificacion modificarUsuario
 @inject CasoDeUsoUsuarioConsultaPorId getExpById
 
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
 <h3>Modificando al Usuario @_usuario.Id- @_usuario.Nombre @_usuario.Apellido </h3>
 <br />
 <label for="nombre">Nombre:</label>
@@ -18,19 +19,57 @@
 <label for="pass">Password:</label>
 <input id="pass" placeholder="Password" @bind="_usuario.Password" class="form-control">
 <br />
+<button class="btn btn-primary" @onclick="Aceptar">Finalizar edición de perfil</button>
+<br />
+<br />
 
-@* <select id="tag" @bind="etiqueta" class="form-control">
+<br />
+<h4>Permisos del usuario</h4>
+@if (_usuario.Permisos != null && _usuario.Permisos.Count > 0)
+{
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Permiso</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var permiso in _usuario.Permisos)
+      {
+        <tr>
+          <td>@permiso</td>
+          <td>
+            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(permiso)">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else
+{
+  <p>Parece que el usuario no posee permisos.</p>
+}
+<br />
+
+<h5> Asignar nuevo permiso al usuario</h5>
+<br />
+<select id="tag" @bind="_nuevoPermiso" class="form-control">
 <option value="">Seleccione una opción</option>
-<option value="EscritoPresentado">@EtiquetaTramite.EscritoPresentado</option>
-<option value="PaseAEstudio">@EtiquetaTramite.PaseAEstudio</option>
-<option value="Despacho">@EtiquetaTramite.Despacho</option>
-<option value="Resolucion">@EtiquetaTramite.Resolucion</option>
-<option value="Notificacion">@EtiquetaTramite.Notificacion</option>
-<option value="PaseAlArchivo">@EtiquetaTramite.PaseAlArchivo</option>
-</select> *@
+  <option value="ExpedienteAlta">@Permiso.ExpedienteAlta</option>
+  <option value="ExpedienteBaja">@Permiso.ExpedienteBaja</option>
+  <option value="ExpedienteModificacion">@Permiso.ExpedienteModificacion</option>
+  <option value="TramiteAlta">@Permiso.TramiteAlta</option>
+  <option value="TramiteBaja">@Permiso.TramiteBaja</option>
+  <option value="TramiteModificacion">@Permiso.TramiteModificacion</option>
+  <option value="UsuarioAlta">@Permiso.UsuarioAlta</option>
+  <option value="UsuarioBaja">@Permiso.UsuarioBaja</option>
+  <option value="UsuarioModificacion">@Permiso.UsuarioModificacion</option>
+  <option value="UsuariosListar">@Permiso.UsuariosListar</option>
+</select>
+<br />
+<button class="btn btn-primary" @onclick="AgregarPermiso">Agregar permiso</button>
 
-
-<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
 
 @if (ShowError)
 {
@@ -43,6 +82,10 @@
   Usuario _usuario = new Usuario();
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
+  DialogoConfirmacion dialogo = null!;
+  Permiso _permisoParaEliminar;
+  Permiso _nuevoPermiso;
+
   protected override void OnParametersSet()
   {
     try
@@ -66,8 +109,41 @@
     try
     {
       modificarUsuario.Ejecutar(_usuario, 1);
-      _usuario = new Usuario();
       Navegador.NavigateTo("listadousuarios");
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+  private void ConfirmarEliminacion(Permiso permiso)
+  {
+    dialogo.Mensaje = $"¿Desea quitar el permiso del usuario?";
+    dialogo.Mostrar();
+    _permisoParaEliminar = permiso;
+
+  }
+  private void Eliminar()
+  {
+
+    try
+    {
+      _usuario.Permisos.Remove(_permisoParaEliminar);
+      modificarUsuario.Ejecutar(_usuario, 1);
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+  private void AgregarPermiso()
+  {
+    try
+    {
+      _usuario.Permisos.Add(_nuevoPermiso);
+      modificarUsuario.Ejecutar(_usuario, 1);
     }
     catch (Exception e)
     {

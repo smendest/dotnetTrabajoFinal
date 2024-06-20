@@ -1,9 +1,10 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @inject CasoDeUsoUsuarioAutenticar AutenticarUsuario
 @inject NavigationManager NavigationManager
 
-<h1>Iniciar sesión</h1>
 
+<h1>Iniciar sesión</h1>
 <form>
   <label for="email">Email:</label>
   <input type="email" id="email" @bind="email" />
@@ -24,16 +25,20 @@
   {
     try
     {
-      if ((email != null) && (password != null))
-      {
-        AutenticarUsuario.Ejecutar(email, password, out userId);
-        NavigationManager.NavigateTo("/");
-      }
-      else throw new Exception("Debe ingresar email y password");
-    }
-    catch (Exception e)
+    if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
     {
-      Console.WriteLine(e.Message);
+      AutenticarUsuario.Ejecutar(email, password, out userId);
+      NavigationManager.NavigateTo($"menuprincipal{userId}");
+    }
+    else
+    {
+      throw new Exception("Debe ingresar email y password");
+    }
+    }
+    catch(Exception e)
+    {
+
     }
   }
 }
+
