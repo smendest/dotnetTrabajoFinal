@@ -1,0 +1,123 @@
+﻿@page "/obtenerexpedienteporid"
+@* @page "/obtenerexpedienteporid{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoExpedienteConsultaPorId GetById
+@inject CasoDeUsoExpedienteBaja eliminarExpediente
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<input placeholder="Id" @bind="Id" class="form-control">
+<button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+@if (MostrarExp && !ShowError)
+{
+  <h4>Información del expediente</h4>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Carátula</th>
+      <th>Fecha de Creación</th>
+      <th>Fecha de Modificación</th>
+      <th>Id usuario</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@expediente.Id</td>
+      <td>@expediente.Caratula</td>
+      <td>@expediente.FechaCreacion</td>
+      <td>@expediente.FechaUltimaModif</td>
+      <td>@expediente.UserId</td>
+      <td>@expediente.Estado</td>
+      <td>
+        <button class="btn btn-primary" @onclick="()=>ModificarExpediente(expediente)">Editar</button>
+        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(expediente)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  @if (expediente.TramitesAsociados != null && expediente.TramitesAsociados.Count > 0)
+  {
+    <h4>Trámites asociados al expediente</h4>
+    <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Contenido</th>
+      <th>Etiqueta</th>
+      <th>Fecha de Creación</th>
+      <th>Fecha de Modificación</th>
+      <th>Id usuario</th>
+      <th>Id expediente</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var tramite in expediente.TramitesAsociados)
+        {
+          <tr>
+            <td>@tramite.Id</td>
+            <td>@tramite.Contenido</td>
+            <td>@tramite.Etiqueta</td>
+            <td>@tramite.FechaCreacion</td>
+            <td>@tramite.FechaUltimaModif</td>
+            <td>@tramite.UserId</td>
+            <td>@tramite.ExpedienteId</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+}
+@if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+
+
+@code {
+  @* [Parameter] public int userId { get; set; } *@
+  Expediente expediente = new Expediente();
+  private int userId = 1;
+  private int Id;
+  private bool MostrarExp = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  void Buscar()
+  {
+    try
+    {
+      expediente = GetById.Ejecutar(Id);
+      MostrarExp = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+
+  DialogoConfirmacion dialogo = null!;
+  Expediente? _expParaEliminar = null;
+  private void ConfirmarEliminacion(Expediente exp)
+  {
+    _expParaEliminar = exp;
+    dialogo.Mensaje = $"¿Desea eliminar al expediente {exp.Id} - {exp.Caratula}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_expParaEliminar != null)
+    {
+      eliminarExpediente.Ejecutar(_expParaEliminar.Id, userId);
+      Navegador.NavigateTo($"listadoexpedientes");
+    }
+  }
+  void ModificarExpediente(Expediente exp)
+  {
+    Navegador.NavigateTo($"modificarexpediente/{exp.Id}");
+  }
+}
