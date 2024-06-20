@@ -6,8 +6,11 @@
 @inject CasoDeUsoExpedienteBaja eliminarExpediente
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<h3>Buscar expediente por Id</h3>
+<br />
 <label for="id">Ingrese el Id del expediente:</label>
 <input id="id" placeholder="Id" @bind="Id" class="form-control">
+<br />
 <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
 @if (MostrarExp && !ShowError)
 {
@@ -72,10 +75,11 @@
     </table>
   }
 }
-@if (ShowError)
+else if (ShowError)
 {
   <h4>@MensajeError</h4>
 }
+
 
 
 @code {

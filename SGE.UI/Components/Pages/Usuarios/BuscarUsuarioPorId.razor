@@ -1,0 +1,115 @@
+﻿@page "/buscarusuarioporid"
+@* @page "/buscarusuarioporid{userId}" *@
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoUsuarioConsultaPorId GetById
+@inject CasoDeUsoUsuarioBaja eliminarUsuario
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<h3>Buscar usuario por Id</h3>
+<br />
+<label for="id">Ingrese el Id del trámite:</label>
+<input id="id" placeholder="Id" @bind="Id" class="form-control">
+<br />
+<button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+@if (MostrarExp && !ShowError)
+{
+  <br />
+  <br />
+  <h4>Información del usuario</h4>
+  <br />
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Email</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@usuario.Id</td>
+      <td>@usuario.Nombre</td>
+      <td>@usuario.Apellido</td>
+      <td>@usuario.Email</td>
+      <td>@usuario.Password</td>
+      <td>
+        <button class="btn btn-primary" @onclick="()=>ModificarUsuario(usuario)">Editar</button>
+        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(usuario)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  @if (usuario.Permisos != null && usuario.Permisos.Count > 0)
+  {
+    <h5>Permisos del usuario</h5>
+    <ul>
+  @foreach (var permiso in usuario.Permisos)
+      {
+        <li>@permiso</li>
+      }
+    </ul>
+  }
+
+}
+@if (ShowError)
+{
+  <br />
+  <h4>@MensajeError</h4>
+}
+
+
+@code {
+  [Parameter] public int userId { get; set; } = 1;
+  Usuario usuario = new Usuario();
+  private int Id;
+  private bool MostrarExp = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  void Buscar()
+  {
+    try
+    {
+      usuario = GetById.Ejecutar(Id);
+      MostrarExp = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+
+  DialogoConfirmacion dialogo = null!;
+  Usuario? _usuarioParaEliminar = null;
+  private void ConfirmarEliminacion(Usuario usuario)
+  {
+    _usuarioParaEliminar = usuario;
+    dialogo.Mensaje = $"¿Desea eliminar al usuarioediente {usuario.Id} - {usuario.Nombre} {usuario.Nombre}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_usuarioParaEliminar != null)
+    {
+      try
+      {
+        eliminarUsuario.Ejecutar(_usuarioParaEliminar.Id, userId);
+        Navegador.NavigateTo($"listadousuarios");
+      }
+      catch (Exception e)
+      {
+        MensajeError = e.Message;
+        ShowError = true;
+      }
+    }
+  }
+  void ModificarUsuario(Usuario usuario)
+  {
+    Navegador.NavigateTo($"modificarusuario/{usuario.Id}");
+  }
+}

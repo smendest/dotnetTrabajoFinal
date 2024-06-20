@@ -1,0 +1,78 @@
+﻿@page "/modificarusuario/{Id:int?}"
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject CasoDeUsoUsuarioModificacion modificarUsuario
+@inject CasoDeUsoUsuarioConsultaPorId getExpById
+
+<h3>Modificando al Usuario @_usuario.Id- @_usuario.Nombre @_usuario.Apellido </h3>
+<br />
+<label for="nombre">Nombre:</label>
+<input id="nombre" placeholder="Nombre" @bind="_usuario.Nombre" class="form-control">
+<br />
+<label for="apellido">Apellido:</label>
+<input id="apellido" placeholder="Apellido" @bind="_usuario.Apellido" class="form-control">
+<br />
+<label for="email">Email:</label>
+<input id="email" placeholder="Email" @bind="_usuario.Email" class="form-control">
+<br />
+<label for="pass">Password:</label>
+<input id="pass" placeholder="Password" @bind="_usuario.Password" class="form-control">
+<br />
+
+@* <select id="tag" @bind="etiqueta" class="form-control">
+<option value="">Seleccione una opción</option>
+<option value="EscritoPresentado">@EtiquetaTramite.EscritoPresentado</option>
+<option value="PaseAEstudio">@EtiquetaTramite.PaseAEstudio</option>
+<option value="Despacho">@EtiquetaTramite.Despacho</option>
+<option value="Resolucion">@EtiquetaTramite.Resolucion</option>
+<option value="Notificacion">@EtiquetaTramite.Notificacion</option>
+<option value="PaseAlArchivo">@EtiquetaTramite.PaseAlArchivo</option>
+</select> *@
+
+
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+@if (ShowError)
+{
+  <br />
+  <h4>@MensajeError</h4>
+}
+
+@code {
+  [Parameter] public int Id { get; set; } = 1;
+  Usuario _usuario = new Usuario();
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  protected override void OnParametersSet()
+  {
+    try
+    {
+      var usuario_hallado = getExpById.Ejecutar(Id);
+
+      if (usuario_hallado != null)
+      {
+        _usuario = usuario_hallado;
+      }
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+
+  }
+  void Aceptar()
+  {
+    try
+    {
+      modificarUsuario.Ejecutar(_usuario, 1);
+      _usuario = new Usuario();
+      Navegador.NavigateTo("listadousuarios");
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+}

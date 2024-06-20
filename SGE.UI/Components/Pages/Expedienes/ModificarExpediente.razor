@@ -5,29 +5,51 @@
 @inject CasoDeUsoExpedienteConsultaPorId getExpById
 @inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
 
-@* TODO: Must receive user Id and pass it to the use case *@
 <h3>Modificando al Expediente "@_expediente.Id" - "@_expediente.Caratula"</h3>
-<input placeholder="Caratula" @bind="_expediente.Caratula" class="form-control">
+<label for="caratula">Carátula:</label>
+<input id="caratula" placeholder="Caratula" @bind="_expediente.Caratula" class="form-control">
 <button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
-
+@if (ShowError)
+{
+  <br />
+  <h4>@MensajeError</h4>
+}
 @code {
   Expediente _expediente = new Expediente();
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
   [Parameter] public int? Id { get; set; }
   protected override void OnParametersSet()
   {
     if (Id != null)
     {
-      var exp_hallado = getExpById.Ejecutar(Id.Value);
-      if (exp_hallado != null)
+      try
       {
-        _expediente = exp_hallado;
+        var exp_hallado = getExpById.Ejecutar(Id.Value);
+        if (exp_hallado != null)
+        {
+          _expediente = exp_hallado;
+        }
+      }
+      catch (Exception e)
+      {
+        MensajeError = e.Message;
+        ShowError = true;
       }
     }
   }
   void Aceptar()
   {
-    modificarExpediente.Ejecutar(_expediente, 1);
-    _expediente = new Expediente();
-    Navegador.NavigateTo("listadoexpedientes");
+    try
+    {
+      modificarExpediente.Ejecutar(_expediente, 1);
+      _expediente = new Expediente();
+      Navegador.NavigateTo("listadoexpedientes");
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
   }
 }

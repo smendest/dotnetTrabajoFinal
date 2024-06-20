@@ -6,6 +6,10 @@
 @inject NavigationManager Navegador
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<h2>Listado de Exṕedientes</h2>
+<br />
+@if (MostrarTabla && !ShowError)
+{
 <table class="table">
   <thead>
     <tr>
@@ -36,12 +40,36 @@
   </tbody>
 </table>
 
+}
+else if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+else
+{
+  <p>El lisado se encuentra vacío</p>
+}
+
 @code {
   [Parameter] public int userId { get; set; }
   List<Expediente> _lista = new List<Expediente>();
+  private bool MostrarTabla = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
   protected override void OnInitialized()
   {
-    _lista = ConsultarTodos.Ejecutar();
+    try
+    {
+      _lista = ConsultarTodos.Ejecutar();
+      if (_lista.Count > 0)
+        MostrarTabla = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
   }
   DialogoConfirmacion dialogo = null!;
   Expediente? _expParaEliminar = null;

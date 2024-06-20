@@ -1,0 +1,101 @@
+﻿@page "/listadousuarios"
+@* @page "/listadousuarios{userId:int}" *@
+@rendermode InteractiveServer
+@inject CasoDeUsoListarUsuarios ConsultarTodos
+@inject CasoDeUsoUsuarioBaja eliminarUsuario
+@inject NavigationManager Navegador
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+<h2>Listado de Usuarios</h2>
+<br />
+@if (MostrarTabla && !ShowError)
+{
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Email</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var usuario in _lista)
+      {
+        <tr>
+          <td>@usuario.Id</td>
+          <td>@usuario.Nombre</td>
+          <td>@usuario.Apellido</td>
+          <td>@usuario.Email</td>
+          <td>@usuario.Password</td>
+          <td>
+            <button class="btn btn-primary" @onclick="()=>ModificarUsuario(usuario)">Editar</button>
+            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(usuario)">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+}
+else if (ShowError)
+{
+  <h4>@MensajeError</h4>
+}
+else
+{
+  <p>El lisado se encuentra vacío</p>
+}
+
+@code {
+  [Parameter] public int userId { get; set; } = 1;
+  List<Usuario> _lista = new List<Usuario>();
+  private bool MostrarTabla = false;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  protected override void OnInitialized()
+  {
+    try
+    {
+      _lista = ConsultarTodos.Ejecutar(userId);
+      if (_lista.Count > 0)
+        MostrarTabla = true;
+      ShowError = false;
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+  DialogoConfirmacion dialogo = null!;
+  Usuario? _usuarioParaEliminar = null;
+  private void ConfirmarEliminacion(Usuario usuario)
+  {
+    _usuarioParaEliminar = usuario;
+    dialogo.Mensaje = $"¿Desea eliminar al usuarioediente {usuario.Id} - {usuario.Nombre} {usuario.Nombre}?";
+    dialogo.Mostrar();
+  }
+  private void Eliminar()
+  {
+    if (_usuarioParaEliminar != null)
+    {
+      try
+      {
+        eliminarUsuario.Ejecutar(_usuarioParaEliminar.Id, userId);
+        _lista = ConsultarTodos.Ejecutar(userId);
+        @* StateHasChanged(); *@
+      }
+      catch (Exception e)
+      {
+        MensajeError = e.Message;
+        ShowError = true;
+      }
+    }
+  }
+  void ModificarUsuario(Usuario usuario)
+  {
+    Navegador.NavigateTo($"modificarusuario/{usuario.Id}");
+  }
+}

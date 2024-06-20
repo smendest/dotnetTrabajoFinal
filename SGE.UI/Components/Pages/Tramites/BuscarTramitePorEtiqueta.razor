@@ -22,7 +22,7 @@
 
 
 <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
-@if (MostrarTramites && !ShowError)
+@if (MostrarTabla && !ShowError)
 {
   <h4>Información del trámite</h4>
 
@@ -59,9 +59,13 @@
   </table>
 
 }
-@if (ShowError)
+else if (ShowError)
 {
   <h4>@MensajeError</h4>
+}
+else
+{
+  <p>El lisado se encuentra vacío</p>
 }
 
 
@@ -70,7 +74,7 @@
   List<Tramite> listaTramites = new List<Tramite>();
   EtiquetaTramite etiqueta = new EtiquetaTramite();
   private int userId = 1;
-  private bool MostrarTramites = false;
+  private bool MostrarTabla = false;
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
 
@@ -80,7 +84,7 @@
     {
       listaTramites = GetByTag.Ejecutar(etiqueta);
       if (listaTramites.Count > 0)
-        MostrarTramites = true;
+        MostrarTabla = true;
       ShowError = false;
     }
     catch (Exception e)
