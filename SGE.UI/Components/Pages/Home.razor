@@ -1,7 +1,7 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @inject CasoDeUsoUsuarioAutenticar AutenticarUsuario
-@inject NavigationManager NavigationManager
+@inject NavigationManager Navegador
 
 
 <h1>Iniciar sesión</h1>
@@ -9,36 +9,55 @@
   <label for="email">Email:</label>
   <input type="email" id="email" @bind="email" />
   <br />
+  <br />
 
   <label for="password">Password:</label>
   <input type="password" id="password" @bind="password" />
   <br />
+  <br />
 
-  <button @onclick="Autenticar">Sign In</button>
+  <button class="btn btn-primary" @onclick="Autenticar">Iniciar sesión</button>
 </form>
+<br />
+<br />
+<p>¿No posee una cuenta? </p>
+<button class="btn btn-primary" @onclick="GoToRegistro">Registrarse</button>
+
+@if (ShowError)
+{
+  <br />
+  <h4>@MensajeError</h4>
+}
 
 @code {
   string? email;
   string? password;
   int userId;
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ah ocurrido un error";
   private void Autenticar()
   {
     try
     {
-    if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
-    {
-      AutenticarUsuario.Ejecutar(email, password, out userId);
-      NavigationManager.NavigateTo($"menuprincipal{userId}");
-    }
-    else
-    {
-      throw new Exception("Debe ingresar email y password");
-    }
+      if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+      {
+        AutenticarUsuario.Ejecutar(email, password, out userId);
+        Navegador.NavigateTo($"menuprincipal{userId}");
+      }
+      else
+      {
+        throw new Exception("Debe ingresar email y password");
+      }
     }
     catch(Exception e)
     {
-
+      MensajeError = e.Message;
+      ShowError = true;
     }
+  }
+  void GoToRegistro()
+  {
+    Navegador.NavigateTo("/registro");
   }
 }
 

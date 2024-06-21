@@ -1,0 +1,57 @@
+@page "/registro"
+@rendermode InteractiveServer
+@inject CasoDeUsoUsuarioAlta CrearNuevoUsuario
+@inject NavigationManager Navegador
+
+<h3>Registrarse</h3>
+
+<form>
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" @bind="usuario.Nombre" class="form-control" />
+  <br />
+  <label for="apellido">Apellido:</label>
+  <input type="text" id="apellido" @bind="usuario.Apellido" class="form-control" />
+  <br />
+  <label for="email">Email:</label>
+  <input type="email" id="email" @bind="usuario.Email" class="form-control" />
+  <br />
+  <label for="password">Password:</label>
+  <input type="password" id="password" @bind="usuario.Password" class="form-control" />
+  <br />
+  <button class="btn btn-primary" @onclick="CrearUsuario">Registrar</button>
+</form>
+
+@if (ShowError)
+{
+  <br />
+  <h4>@MensajeError</h4>
+}
+
+@code {
+  private Usuario usuario = new Usuario();
+  private bool ShowError = false;
+  private string MensajeError { get; set; } = "Ha ocurrido un error";
+
+  private void CrearUsuario()
+  {
+    try
+    {
+      if (!string.IsNullOrEmpty(usuario.Nombre) && !string.IsNullOrEmpty(usuario.Apellido) &&
+      !string.IsNullOrEmpty(usuario.Email) && !string.IsNullOrEmpty(usuario.Password))
+      {
+        CrearNuevoUsuario.Ejecutar(usuario);
+        Navegador.NavigateTo("/");
+        ShowError = false;
+      }
+      else
+      {
+        throw new Exception("Debe ingresar todos los campos para completar el registro");
+      }
+    }
+    catch (Exception e)
+    {
+      MensajeError = e.Message;
+      ShowError = true;
+    }
+  }
+}

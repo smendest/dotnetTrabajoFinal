@@ -36,9 +36,16 @@
   {
     try
     {
-      CrearNuevoUsuario.Ejecutar(_usuario);
-      _usuario = new Usuario();
-      Navegador.NavigateTo("listadousuarios");
+      if (!string.IsNullOrEmpty(_usuario.Nombre) && !string.IsNullOrEmpty(_usuario.Apellido) &&
+      !string.IsNullOrEmpty(_usuario.Email) && !string.IsNullOrEmpty(_usuario.Password))
+      {
+        CrearNuevoUsuario.Ejecutar(_usuario);
+        Navegador.NavigateTo("listadousuarios");
+      }
+      else
+      {
+        throw new Exception("Debe ingresar todos los campos para completar el registro");
+      }
     }
     catch (Exception e)
     {

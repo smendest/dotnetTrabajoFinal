@@ -1,4 +1,4 @@
-﻿@page "/modificarusuario/{Id:int?}"
+﻿@page "/modificarusuario{currentUserId:int}/{Id:int?}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoUsuarioModificacion modificarUsuario
@@ -78,7 +78,8 @@ else
 }
 
 @code {
-  [Parameter] public int Id { get; set; } = 1;
+  [Parameter] public int Id { get; set; }
+  [Parameter] public int currentUserId { get; set; } = 1;
   Usuario _usuario = new Usuario();
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
@@ -91,11 +92,11 @@ else
     try
     {
       var usuario_hallado = getExpById.Ejecutar(Id);
-
       if (usuario_hallado != null)
       {
         _usuario = usuario_hallado;
       }
+      ShowError = false;
     }
     catch (Exception e)
     {
@@ -108,7 +109,7 @@ else
   {
     try
     {
-      modificarUsuario.Ejecutar(_usuario, 1);
+      modificarUsuario.Ejecutar(_usuario, currentUserId);
       Navegador.NavigateTo("listadousuarios");
     }
     catch (Exception e)
@@ -130,7 +131,7 @@ else
     try
     {
       _usuario.Permisos.Remove(_permisoParaEliminar);
-      modificarUsuario.Ejecutar(_usuario, 1);
+      modificarUsuario.Ejecutar(_usuario, currentUserId);
     }
     catch (Exception e)
     {
@@ -143,7 +144,7 @@ else
     try
     {
       _usuario.Permisos.Add(_nuevoPermiso);
-      modificarUsuario.Ejecutar(_usuario, 1);
+      modificarUsuario.Ejecutar(_usuario, currentUserId);
     }
     catch (Exception e)
     {
