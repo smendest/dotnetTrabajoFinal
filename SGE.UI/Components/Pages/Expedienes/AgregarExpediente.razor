@@ -1,5 +1,4 @@
-﻿@page "/agregarexpediente"
-@* @page "/agregarexpediente{userId}" *@
+﻿@page "/agregarexpediente{userId:int}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoExpedienteAlta agregarExpediente
@@ -15,9 +14,8 @@
   <h4>@MensajeError</h4>
 }
 @code {
-  @* [Parameter] public int userId { get; set; } *@
+  [Parameter] public int userId { get; set; }
   Expediente _expediente = new Expediente();
-  private int userId = 1;
   private bool ShowError { get; set; } = false;
   private string MensajeError { get; set; } = "Ocurrió un error";
   void Aceptar()
@@ -26,7 +24,7 @@
     {
       agregarExpediente.Ejecutar(_expediente, userId);
       _expediente = new Expediente();
-      Navegador.NavigateTo("listadoexpedientes");
+      Navegador.NavigateTo($"/listadoexpedientes{userId}");
     }
     catch (Exception e)
     {

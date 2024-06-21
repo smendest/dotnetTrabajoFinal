@@ -1,12 +1,17 @@
-﻿@page "/listadoexpedientes"
-@* @page "/listadoexpedientes{userId:int}" *@
+﻿@page "/listadoexpedientes{userId:int}"
 @rendermode InteractiveServer
 @inject CasoDeUsoExpedienteConsultaTodos ConsultarTodos
 @inject CasoDeUsoExpedienteBaja eliminarExpediente
 @inject NavigationManager Navegador
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
-<h2>Listado de Exṕedientes</h2>
+<div style="display:flex; flex-direction:row; justify-content: space-between">
+  <h2>Listado de Expedientes</h2>
+  <div>
+    <button class="btn btn-primary" @onclick="CrearNuevoExpediente">Crear Nuevo</button>
+    <button class="btn btn-primary" @onclick="BuscarPorId">Buscar por Id</button>
+  </div>
+</div>
 <br />
 @if (MostrarTabla && !ShowError)
 {
@@ -89,6 +94,17 @@ else
   }
   void ModificarExpediente(Expediente exp)
   {
-    Navegador.NavigateTo($"modificarexpediente/{exp.Id}");
+    Navegador.NavigateTo($"modificarexpediente{userId}/{exp.Id}");
+  }
+  void CrearNuevoExpediente()
+  {
+
+    Navegador.NavigateTo($"/agregarexpediente{userId}");
+  }
+  void BuscarPorId()
+  {
+
+    Navegador.NavigateTo($"buscarexpedienteporid{userId}");
+    @* Navegador.NavigateTo("buscarexpedienteporid"); *@
   }
 }

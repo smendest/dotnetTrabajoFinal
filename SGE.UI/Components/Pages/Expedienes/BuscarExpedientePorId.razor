@@ -1,5 +1,4 @@
-﻿@page "/buscarexpedienteporid"
-@* @page "/buscarexpedienteporid{userId}" *@
+﻿@page "/buscarexpedienteporid{userId:int}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoExpedienteConsultaPorId GetById
@@ -83,9 +82,9 @@ else if (ShowError)
 
 
 @code {
-  @* [Parameter] public int userId { get; set; } *@
+  [Parameter] public int userId { get; set; }
   Expediente expediente = new Expediente();
-  private int userId = 1;
+  @* private int userId = 1; *@
   private int Id;
   private bool MostrarExp = false;
   private bool ShowError = false;
@@ -120,7 +119,7 @@ else if (ShowError)
       try
       {
         eliminarExpediente.Ejecutar(_expParaEliminar.Id, userId);
-        Navegador.NavigateTo($"listadoexpedientes");
+        Navegador.NavigateTo($"/listadoexpedientes{userId}");
       }
       catch (Exception e)
       {
@@ -131,6 +130,6 @@ else if (ShowError)
   }
   void ModificarExpediente(Expediente exp)
   {
-    Navegador.NavigateTo($"modificarexpediente/{exp.Id}");
+    Navegador.NavigateTo($"modificarexpediente{userId}/{exp.Id}");
   }
 }

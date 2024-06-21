@@ -1,5 +1,4 @@
-﻿@page "/listadousuarios"
-@* @page "/listadousuarios{userId:int}" *@
+﻿@page "/listadousuarios{userId:int}"
 @rendermode InteractiveServer
 @inject CasoDeUsoListarUsuarios ConsultarTodos
 @inject CasoDeUsoUsuarioBaja eliminarUsuario
@@ -49,7 +48,7 @@ else
 }
 
 @code {
-  [Parameter] public int userId { get; set; } = 1;
+  [Parameter] public int userId { get; set; }
   List<Usuario> _lista = new List<Usuario>();
   private bool MostrarTabla = false;
   private bool ShowError = false;
@@ -96,6 +95,6 @@ else
   }
   void ModificarUsuario(Usuario usuario)
   {
-    Navegador.NavigateTo($"modificarusuario/{userId}/{usuario.Id}");
+    Navegador.NavigateTo($"modificarusuario{userId}/{usuario.Id}");
   }
 }

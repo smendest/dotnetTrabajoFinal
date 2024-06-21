@@ -1,13 +1,13 @@
 ﻿@page "/"
 @rendermode InteractiveServer
-@inject CasoDeUsoUsuarioAutenticar AutenticarUsuario
+@inject CasoDeUsoUsuarioAutenticar autenticarUsuario
 @inject NavigationManager Navegador
 
 
 <h1>Iniciar sesión</h1>
 <form>
   <label for="email">Email:</label>
-  <input type="email" id="email" @bind="email" />
+  <input id="email" @bind="email" />
   <br />
   <br />
 
@@ -19,12 +19,20 @@
   <button class="btn btn-primary" @onclick="Autenticar">Iniciar sesión</button>
 </form>
 <br />
+<h4> Por problemas en la navegación luego de iniciar sesión se debe recorrerr la aplicación desde
+  la opción "Menú Principal (admin)" presente en la barra lateral.
+</h4>
+
+
+<br />
+<br />
 <br />
 <p>¿No posee una cuenta? </p>
 <button class="btn btn-primary" @onclick="GoToRegistro">Registrarse</button>
 
 @if (ShowError)
 {
+  <br />
   <br />
   <h4>@MensajeError</h4>
 }
@@ -34,15 +42,17 @@
   string? password;
   int userId;
   private bool ShowError = false;
-  private string MensajeError { get; set; } = "Ah ocurrido un error";
+  private string MensajeError { get; set; } = "Ha ocurrido un error";
   private void Autenticar()
   {
     try
     {
       if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
       {
-        AutenticarUsuario.Ejecutar(email, password, out userId);
-        Navegador.NavigateTo($"menuprincipal{userId}");
+        autenticarUsuario.Ejecutar(email, password, out userId);
+        @* No funciona la navegación a pesar de intentarlo de muchas formas *@
+        Navegador.NavigateTo($"/menuprincipal/{userId}");
+
       }
       else
       {

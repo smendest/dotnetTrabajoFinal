@@ -31,7 +31,6 @@
   private Usuario usuario = new Usuario();
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ha ocurrido un error";
-
   private void CrearUsuario()
   {
     try
@@ -40,7 +39,7 @@
       !string.IsNullOrEmpty(usuario.Email) && !string.IsNullOrEmpty(usuario.Password))
       {
         CrearNuevoUsuario.Ejecutar(usuario);
-        Navegador.NavigateTo("/");
+        Navegador.NavigateTo("");
         ShowError = false;
       }
       else

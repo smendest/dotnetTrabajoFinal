@@ -1,5 +1,4 @@
-﻿@page "/menuprincipal"
-@* @page "/menuprincipal{userId:int}" *@
+﻿@page "/menuprincipal/{userId:int?}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador
 
@@ -13,31 +12,27 @@
   }
   <button class="btn btn-primary" @onclick="GoToEditarPerfil">Editar Perfil</button>
 </div>
-@if (test)
-{
-  <p>SE EJECUTÓ</p>
-}
 
 
 @code {
-  [Parameter] public int userId { get; set; } = 1;
-  bool test = false;
+  [Parameter] public int userId { get; set; }
 
+  protected override void OnInitialized()
+  {
+    if (userId == 0)
+      userId = 1;
+  }
   void GoToListadoExpedientes()
   {
-    @* Navegador.NavigateTo($"/listadoexpedientes{userId}"); *@
-    Navegador.NavigateTo($"listadoexpedientes");
+    Navegador.NavigateTo($"/listadoexpedientes{userId}");
   }
   void GoToMenuTramites()
   {
-    @* Navegador.NavigateTo($"menutramites{userId}"); *@
-    Navegador.NavigateTo($"menutramites");
+    Navegador.NavigateTo($"/menutramites{userId}");
   }
   void GoToListadoUsuarios()
   {
-    Navegador.NavigateTo($"listadousuarios");
-    test = true;
-
+    Navegador.NavigateTo($"/listadousuarios{userId}");
   }
   void GoToEditarPerfil()
   {

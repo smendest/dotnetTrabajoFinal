@@ -1,4 +1,4 @@
-﻿@page "/modificartramite/{Id:int?}"
+﻿@page "/modificartramite{userId:int}/{Id:int?}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoTramiteModificacion modificarTramite
@@ -18,6 +18,7 @@
 @code {
   Tramite _tramite = new Tramite();
   [Parameter] public int? Id { get; set; }
+  [Parameter] public int userId { get; set; }
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
   protected override void OnParametersSet()
@@ -35,9 +36,10 @@
   {
     try
     {
-      modificarTramite.Ejecutar(_tramite, 1);
+      modificarTramite.Ejecutar(_tramite, userId);
       _tramite = new Tramite();
-      Navegador.NavigateTo("menutramites");
+      Navegador.NavigateTo($"/menutramites{userId}");
+
     }
     catch (Exception e)
     {

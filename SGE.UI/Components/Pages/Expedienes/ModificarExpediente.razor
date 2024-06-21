@@ -1,4 +1,4 @@
-﻿@page "/modificarexpediente/{Id:int?}"
+﻿@page "/modificarexpediente{userId:int}/{Id:int?}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoExpedienteModificacion modificarExpediente
@@ -15,6 +15,7 @@
   <h4>@MensajeError</h4>
 }
 @code {
+  [Parameter] public int userId { get; set; }
   Expediente _expediente = new Expediente();
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
@@ -42,9 +43,9 @@
   {
     try
     {
-      modificarExpediente.Ejecutar(_expediente, 1);
+      modificarExpediente.Ejecutar(_expediente, userId);
       _expediente = new Expediente();
-      Navegador.NavigateTo("listadoexpedientes");
+      Navegador.NavigateTo($"/listadoexpedientes{userId}");
     }
     catch (Exception e)
     {

@@ -79,7 +79,7 @@ else
 
 @code {
   [Parameter] public int Id { get; set; }
-  [Parameter] public int currentUserId { get; set; } = 1;
+  [Parameter] public int currentUserId { get; set; }
   Usuario _usuario = new Usuario();
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
@@ -110,7 +110,7 @@ else
     try
     {
       modificarUsuario.Ejecutar(_usuario, currentUserId);
-      Navegador.NavigateTo("listadousuarios");
+      Navegador.NavigateTo($"/listadousuarios{currentUserId}");
     }
     catch (Exception e)
     {

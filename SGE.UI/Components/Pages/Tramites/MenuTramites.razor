@@ -1,5 +1,5 @@
-﻿@page "/menutramites"
-@* @page "menutramites{userId}" *@
+﻿@page "/menutramites{userId:int}"
+@* @page "/menutramites" *@
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 <div class="vertical">
@@ -9,17 +9,20 @@
 </div>
 
 @code {
-  @* [Parameter] public int userId { get; set; } *@
+  [Parameter] public int userId { get; set; }
   void GoToAgregarTramite()
   {
-    Navegador.NavigateTo("agregartramite");
+    Navegador.NavigateTo($"/agregartramite{userId}");
+    @* Navegador.NavigateTo("agregartramite"); *@
   }
   void GoToBuscarTramitePorid()
   {
-    Navegador.NavigateTo("buscartramiteporid");
+    Navegador.NavigateTo($"/buscartramiteporid{userId}");
+    @* Navegador.NavigateTo("buscartramiteporid"); *@
   }
   void GoToBuscarTramitesPorEtiqueta()
   {
-    Navegador.NavigateTo("buscartramiteporetiqueta");
+    Navegador.NavigateTo($"/buscartramiteporetiqueta{userId}");
+    @* Navegador.NavigateTo("buscartramiteporetiqueta"); *@
   }
 }

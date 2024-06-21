@@ -1,5 +1,5 @@
-﻿@page "/agregartramite"
-@* @page "agregartramite{userId}" *@
+﻿@page "/agregartramite{userId:int}"
+@* @page "/agregartramite" *@
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoTramiteAlta agregarTramite
@@ -19,8 +19,7 @@
 }
 
 @code {
-  @* [Parameter] public int userId { get; set; } *@
-  private int userId = 1;
+  [Parameter] public int userId { get; set; }
   Tramite _tramite = new Tramite();
   private bool ShowError { get; set; } = false;
   private string MensajeError { get; set; } = "Ocurrió un error";
@@ -30,7 +29,7 @@
     {
       agregarTramite.Ejecutar(_tramite, userId);
       _tramite = new Tramite();
-      Navegador.NavigateTo("menutramites");
+      Navegador.NavigateTo($"/menutramites{userId}");
     }
     catch (Exception e)
     {
