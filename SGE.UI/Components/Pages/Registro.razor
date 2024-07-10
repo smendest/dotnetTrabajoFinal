@@ -5,7 +5,6 @@
 
 <h3>Registrarse</h3>
 
-<form>
   <label for="nombre">Nombre:</label>
   <input type="text" id="nombre" @bind="usuario.Nombre" class="form-control" />
   <br />
@@ -18,8 +17,7 @@
   <label for="password">Password:</label>
   <input type="password" id="password" @bind="usuario.Password" class="form-control" />
   <br />
-  <button class="btn btn-primary" @onclick="CrearUsuario">Registrar</button>
-</form>
+<button class="btn btn-primary" @onclick="CrearUsuario">Registrar</button>
 
 @if (ShowError)
 {
@@ -39,7 +37,7 @@
       !string.IsNullOrEmpty(usuario.Email) && !string.IsNullOrEmpty(usuario.Password))
       {
         CrearNuevoUsuario.Ejecutar(usuario);
-        Navegador.NavigateTo("");
+        Navegador.NavigateTo("/");
         ShowError = false;
       }
       else

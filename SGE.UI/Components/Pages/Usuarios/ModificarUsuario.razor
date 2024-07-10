@@ -39,7 +39,10 @@
         <tr>
           <td>@permiso</td>
           <td>
+            @if (currentUserId == 1)
+            {
             <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(permiso)">Eliminar</button>
+            }
           </td>
         </tr>
       }
@@ -52,6 +55,8 @@ else
 }
 <br />
 
+@if (currentUserId == 1) // If is admin
+{
 <h5> Asignar nuevo permiso al usuario</h5>
 <br />
 <select id="tag" @bind="_nuevoPermiso" class="form-control">
@@ -69,6 +74,7 @@ else
 </select>
 <br />
 <button class="btn btn-primary" @onclick="AgregarPermiso">Agregar permiso</button>
+}
 
 
 @if (ShowError)
@@ -139,12 +145,16 @@ else
       ShowError = true;
     }
   }
+  @* TODO: Un usuario no puede agregarse permisos a sí mismo. *@
   private void AgregarPermiso()
   {
     try
     {
+      if (currentUserId == 1)
+      {
       _usuario.Permisos.Add(_nuevoPermiso);
       modificarUsuario.Ejecutar(_usuario, currentUserId);
+      }
     }
     catch (Exception e)
     {

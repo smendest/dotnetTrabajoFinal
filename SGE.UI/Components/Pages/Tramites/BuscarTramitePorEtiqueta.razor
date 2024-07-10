@@ -1,5 +1,4 @@
-﻿@page "/buscartramiteporetiqueta"
-@* @page "/buscartramiteporetiqueta{userId}" *@
+﻿@page "/buscartramiteporetiqueta{userId:int}"
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
 @inject CasoDeUsoTramiteConsultaPorEtiqueta GetByTag
@@ -65,15 +64,14 @@ else if (ShowError)
 }
 else
 {
-  <p>El lisado se encuentra vacío</p>
+  <p>El lisado se encuentra vacío o aún no se ha iniciado la búsqueda</p>
 }
 
 
 @code {
-  @* [Parameter] public int userId { get; set; } *@
+  [Parameter] public int userId { get; set; }
   List<Tramite> listaTramites = new List<Tramite>();
   EtiquetaTramite etiqueta = new EtiquetaTramite();
-  private int userId = 1;
   private bool MostrarTabla = false;
   private bool ShowError = false;
   private string MensajeError { get; set; } = "Ah ocurrido un error";
@@ -107,11 +105,11 @@ else
     if (_tramiteParaEliminar != null)
     {
       eliminarTramite.Ejecutar(_tramiteParaEliminar.Id, userId);
-      Navegador.NavigateTo($"menutramites");
+      Navegador.NavigateTo($"menutramites{userId}");
     }
   }
   void ModificarTramite(Tramite tramite)
   {
-    Navegador.NavigateTo($"modificartramite/{tramite.Id}");
+    Navegador.NavigateTo($"modificartramite{userId}/{tramite.Id}");
   }
 }
